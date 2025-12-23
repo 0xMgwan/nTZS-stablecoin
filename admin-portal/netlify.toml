@@ -1,7 +1,6 @@
 [build]
-  base = "admin-portal"
   publish = "build"
-  command = "./netlify-deploy.sh"
+  command = "npm install --legacy-peer-deps && npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
