@@ -279,8 +279,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-- **Website**: [nedapay.com](https://nedapay.com)
-- **Twitter**: [@NEDAPay](https://twitter.com/NEDAPay)
+- **Website**: [nedapay.xyz](https://nedapay.xyz)
+- **Twitter**: [@NEDAPay_xyz](https://twitter.com/NEDAPay_xyz)
 - **Email**: info@nedapay.com
 
 ---
@@ -289,6 +289,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   <strong>Securing Tanzania's Digital Financial Future</strong>
 </p>
 
-<p align="center">
-  Built with ❤️ by <a href="https://github.com/0xMgwan">NEDA Labs</a>
-</p>
