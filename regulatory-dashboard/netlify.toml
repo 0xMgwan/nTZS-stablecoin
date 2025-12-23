@@ -5,6 +5,8 @@
 [build.environment]
   CI = "false"
   NODE_VERSION = "18"
+  # Skip scanning for public RPC URL (not a secret)
+  SECRETS_SCAN_OMIT_KEYS = "BASE_SEPOLIA_RPC_URL"
 
 [[redirects]]
   from = "/*"
