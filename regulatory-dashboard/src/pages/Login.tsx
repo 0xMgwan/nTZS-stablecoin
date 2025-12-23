@@ -13,7 +13,6 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
-  Avatar,
   useTheme as useMuiTheme,
   alpha,
   Divider,
@@ -21,7 +20,7 @@ import {
 } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { AccountBalanceOutlined, Security, LightMode, DarkMode } from '@mui/icons-material';
+import { Security, LightMode, DarkMode } from '@mui/icons-material';
 
 const Login: React.FC = () => {
   const { login, isAuthenticated, error } = useAuth();

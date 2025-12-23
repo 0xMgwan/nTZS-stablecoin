@@ -19,7 +19,6 @@ import {
   TextField,
   MenuItem,
   InputAdornment,
-  IconButton,
   Chip,
   Pagination
 } from '@mui/material';
@@ -91,6 +90,7 @@ const TransactionMonitoring: React.FC = () => {
 
   useEffect(() => {
     filterTransactions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, transactionType, dateRange, transactions]);
 
   const fetchTransactions = async () => {

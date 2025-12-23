@@ -6,6 +6,7 @@ import RESERVE_ABI from '../contracts/abis/Reserve.json';
 // Contract addresses - Base Sepolia testnet
 const NTZS_ADDRESS = '0x2bD2305bDB279a532620d76D0c352F35B48ef2C0';
 const RESERVE_ADDRESS = '0x72Ff093CEA6035fa395c0910B006af2DC4D4E9F5';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const USDC_ADDRESS = '0x4ecD2810a6A412fdc95B71c03767068C35D23fE3';
 
 interface BlockchainContextType {

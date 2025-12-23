@@ -72,6 +72,7 @@ const TokenSupply: React.FC = () => {
 
   useEffect(() => {
     fetchTokenEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ntzsContract]);
 
   const fetchTokenEvents = async () => {

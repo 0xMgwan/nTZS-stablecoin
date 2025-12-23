@@ -40,6 +40,7 @@ ChartJS.register(
 const Dashboard: React.FC = () => {
   const { 
     totalSupply, 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     circulatingSupply, 
     reserveRatio, 
     reserveBalance, 
@@ -50,6 +51,7 @@ const Dashboard: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { mode } = useTheme();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const muiTheme = useMuiTheme();
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   

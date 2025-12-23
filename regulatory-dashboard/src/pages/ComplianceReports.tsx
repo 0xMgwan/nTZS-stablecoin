@@ -41,6 +41,7 @@ interface Report {
 }
 
 const ComplianceReports: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user } = useAuth();
   const [selectedReport, setSelectedReport] = useState<string>('monthly');
   const [selectedDate, setSelectedDate] = useState<string>('2025-05');
