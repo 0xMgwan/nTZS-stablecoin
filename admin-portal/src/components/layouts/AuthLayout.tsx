@@ -47,14 +47,26 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
             p: 4,
           }}
         >
+          <Box
+            component="img"
+            src="/images/neda-pay-logo.jpg"
+            alt="nTZS Logo"
+            sx={{ 
+              width: 100, 
+              height: 100, 
+              mb: 3,
+              borderRadius: 2,
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
+            }}
+          />
           <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
-            TSHC
+            NTZS
           </Typography>
           <Typography variant="h6" gutterBottom>
             Tanzania Shilling Stablecoin
           </Typography>
           <Typography variant="body1">
-            Deposit TSH, mint TSHC tokens, and manage your digital assets
+            Deposit TSH, mint NTZS tokens, and manage your digital assets
           </Typography>
         </Box>
       </Grid>
@@ -74,12 +86,12 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
         >
           <Box sx={{ mb: 4, textAlign: 'center' }}>
             <img 
-              src="/images/neda-pay-logo.svg" 
-              alt="NEDA Pay Logo" 
-              style={{ height: 60, width: 'auto', marginBottom: 16 }} 
+              src="/images/neda-pay-logo.jpg" 
+              alt="nTZS Logo" 
+              style={{ height: 60, width: 'auto', marginBottom: 16, borderRadius: 8 }} 
             />
             <Typography component="h1" variant="h5" color="primary" fontWeight="bold">
-              TSHC Management
+              NTZS Management
             </Typography>
           </Box>
           {children}

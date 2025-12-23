@@ -57,7 +57,7 @@ const RoleManagement: React.FC = () => {
 
   useEffect(() => {
     // Get contract address from environment or context
-    const tshcAddress = process.env.REACT_APP_TSHC_CONTRACT_ADDRESS || '0x0859D42FD008D617c087DD386667da51570B1aAB';
+    const tshcAddress = process.env.REACT_APP_NTZS_CONTRACT_ADDRESS || '0x0859D42FD008D617c087DD386667da51570B1aAB';
     setContractAddress(tshcAddress);
     
     // Get the MINTER_ROLE bytes32 value
@@ -176,7 +176,7 @@ const RoleManagement: React.FC = () => {
       <Box sx={{ p: 3, textAlign: 'center' }}>
         <Typography variant="h5" gutterBottom>Connect Wallet</Typography>
         <Typography variant="body1" gutterBottom>
-          Please connect your wallet to manage TSHC minter roles
+          Please connect your wallet to manage NTZS minter roles
         </Typography>
         <Button 
           variant="contained" 
@@ -195,7 +195,7 @@ const RoleManagement: React.FC = () => {
       <Box sx={{ p: 3, textAlign: 'center' }}>
         <Typography variant="h5" gutterBottom>Wrong Network</Typography>
         <Typography variant="body1" gutterBottom>
-          Please switch to the Base network to manage TSHC minter roles
+          Please switch to the Base network to manage NTZS minter roles
         </Typography>
         <Button 
           variant="contained" 
@@ -211,7 +211,7 @@ const RoleManagement: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>TSHC Role Management</Typography>
+      <Typography variant="h4" gutterBottom>NTZS Role Management</Typography>
       
       {web3Error && (
         <Alert severity="error" sx={{ mb: 3 }}>
@@ -237,7 +237,7 @@ const RoleManagement: React.FC = () => {
           <Paper sx={{ p: 3, height: '100%' }}>
             <Typography variant="h6" gutterBottom>Grant MINTER_ROLE</Typography>
             <Typography variant="body2" color="textSecondary" paragraph>
-              Add a new address that can mint and burn TSHC tokens
+              Add a new address that can mint and burn NTZS tokens
             </Typography>
             
             <TextField

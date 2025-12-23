@@ -236,7 +236,7 @@ const ReserveRatio: React.FC = () => {
                     Total Supply:
                   </Typography>
                   <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', mb: 2 }}>
-                    {formatCurrency(totalSupply)} TSHC
+                    {formatCurrency(totalSupply)} NTZS
                   </Typography>
                   
                   <Typography variant="body1" color="text.secondary">
@@ -355,7 +355,7 @@ const ReserveRatio: React.FC = () => {
                 sx={{ mt: 2 }}
               >
                 {reserveRatio >= 100 
-                  ? "The reserve is fully collateralized. All TSHC tokens are backed by TSH government bonds, T-bills, and cash equivalents."
+                  ? "The reserve is fully collateralized. All NTZS tokens are backed by TSH government bonds, T-bills, and cash equivalents."
                   : reserveRatio >= 95
                   ? "The reserve is within acceptable limits but not fully collateralized."
                   : "The reserve is below the minimum required ratio. Immediate action required."
@@ -416,7 +416,7 @@ const ReserveRatio: React.FC = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Date</TableCell>
-                      <TableCell>Total Supply (TSHC)</TableCell>
+                      <TableCell>Total Supply (NTZS)</TableCell>
                       <TableCell>Reserve Balance (TSH)</TableCell>
                       <TableCell>Reserve Ratio</TableCell>
                       <TableCell>Status</TableCell>
@@ -469,13 +469,13 @@ const ReserveRatio: React.FC = () => {
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Typography variant="body1" paragraph>
-              The TSHC stablecoin is designed to maintain a 1:1 peg with the Tanzanian Shilling (TSH).
+              The NTZS stablecoin is designed to maintain a 1:1 peg with the Tanzanian Shilling (TSH).
               To ensure stability and regulatory compliance, NEDA Pay maintains a diverse reserve of cash equivalents, 
-              government bonds, and T-bills that backs the TSHC tokens in circulation.
+              government bonds, and T-bills that backs the NTZS tokens in circulation.
             </Typography>
             <Typography variant="body1" paragraph>
               According to regulatory requirements, the reserve ratio must be maintained at a minimum of 95%,
-              with a target of 100%. This means that for every TSHC token in circulation, at least 0.95 USDC
+              with a target of 100%. This means that for every NTZS token in circulation, at least 0.95 USDC
               must be held in the reserve contract.
             </Typography>
             <Typography variant="body1">

@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
-        label: 'Transaction Volume (TSHC)',
+        label: 'Transaction Volume (NTZS)',
         data: [12000, 19000, 15000, 25000, 22000, 30000],
         borderColor: 'rgb(53, 162, 235)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
@@ -187,7 +187,7 @@ const Dashboard: React.FC = () => {
               Welcome, {user?.name}
             </Typography>
             <Typography variant="body1">
-              This dashboard provides regulatory oversight for TSHC stablecoin on Base network.
+              This dashboard provides regulatory oversight for NTZS stablecoin on Base network.
               As a {user?.role.replace('_', ' ')}, you have access to monitor token supply, reserve ratio,
               and transaction activity.
             </Typography>
@@ -206,10 +206,10 @@ const Dashboard: React.FC = () => {
               </Box>
               <Divider sx={{ my: 1 }} />
               <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', my: 2 }}>
-                {formatCurrency(totalSupply)} TSHC
+                {formatCurrency(totalSupply)} NTZS
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Total TSHC tokens in circulation
+                Total NTZS tokens in circulation
               </Typography>
             </CardContent>
           </Card>
@@ -257,7 +257,7 @@ const Dashboard: React.FC = () => {
                 {reserveRatio.toFixed(2)}%
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Percentage of TSHC backed by USDC
+                Percentage of NTZS backed by USDC
               </Typography>
             </CardContent>
           </Card>
@@ -277,7 +277,7 @@ const Dashboard: React.FC = () => {
                 1,245
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Users with TSHC transactions in last 30 days
+                Users with NTZS transactions in last 30 days
               </Typography>
             </CardContent>
           </Card>

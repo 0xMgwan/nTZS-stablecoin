@@ -91,7 +91,7 @@ const mockReserveTransactions = [
     id: 2, 
     date: '2025-04-16', 
     type: 'Mint', 
-    assetType: 'TSHC', 
+    assetType: 'NTZS', 
     amount: 100000, 
     verifiedBy: 'Admin', 
     organization: 'NEDA Pay',
@@ -101,7 +101,7 @@ const mockReserveTransactions = [
     id: 3, 
     date: '2025-04-16', 
     type: 'Burn', 
-    assetType: 'TSHC', 
+    assetType: 'NTZS', 
     amount: 50000, 
     verifiedBy: 'Admin', 
     organization: 'NEDA Pay',
@@ -170,7 +170,7 @@ const Reserves: React.FC = () => {
           Reserve Management
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Monitor and manage the collateral backing the TSHC stablecoin
+          Monitor and manage the collateral backing the NTZS stablecoin
         </Typography>
       </Box>
 
@@ -224,7 +224,7 @@ const Reserves: React.FC = () => {
                 <Typography variant="h6" fontWeight="medium">
                   Backing Ratio
                 </Typography>
-                <Tooltip title="The ratio of reserve assets to TSHC in circulation">
+                <Tooltip title="The ratio of reserve assets to NTZS in circulation">
                   <IconButton size="small" sx={{ ml: 1 }}>
                     <InfoIcon fontSize="small" />
                   </IconButton>

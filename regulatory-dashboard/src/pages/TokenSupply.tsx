@@ -52,7 +52,7 @@ const TokenSupply: React.FC = () => {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
-        label: 'Total Supply (TSHC)',
+        label: 'Total Supply (NTZS)',
         data: [5000, 8000, 12000, 15000, 18000, parseFloat(totalSupply)],
         borderColor: 'rgb(53, 162, 235)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
@@ -216,10 +216,10 @@ const TokenSupply: React.FC = () => {
                 Total Supply
               </Typography>
               <Typography variant="h3" component="div" sx={{ fontWeight: 'bold', my: 2 }}>
-                {formatCurrency(totalSupply)} TSHC
+                {formatCurrency(totalSupply)} NTZS
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Total amount of TSHC tokens that have been minted
+                Total amount of NTZS tokens that have been minted
               </Typography>
             </CardContent>
           </Card>
@@ -232,10 +232,10 @@ const TokenSupply: React.FC = () => {
                 Circulating Supply
               </Typography>
               <Typography variant="h3" component="div" sx={{ fontWeight: 'bold', my: 2 }}>
-                {formatCurrency(circulatingSupply)} TSHC
+                {formatCurrency(circulatingSupply)} NTZS
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                TSHC tokens currently in circulation (excluding any locked tokens)
+                NTZS tokens currently in circulation (excluding any locked tokens)
               </Typography>
             </CardContent>
           </Card>
@@ -299,7 +299,7 @@ const TokenSupply: React.FC = () => {
                     {mintEvents.map((event) => (
                       <TableRow key={event.id}>
                         <TableCell>{formatDate(event.timestamp)}</TableCell>
-                        <TableCell>{formatCurrency(event.amount)} TSHC</TableCell>
+                        <TableCell>{formatCurrency(event.amount)} NTZS</TableCell>
                         <TableCell>{formatAddress(event.minter)}</TableCell>
                       </TableRow>
                     ))}
@@ -342,7 +342,7 @@ const TokenSupply: React.FC = () => {
                     {burnEvents.map((event) => (
                       <TableRow key={event.id}>
                         <TableCell>{formatDate(event.timestamp)}</TableCell>
-                        <TableCell>{formatCurrency(event.amount)} TSHC</TableCell>
+                        <TableCell>{formatCurrency(event.amount)} NTZS</TableCell>
                         <TableCell>{formatAddress(event.burner)}</TableCell>
                       </TableRow>
                     ))}
@@ -366,7 +366,7 @@ const TokenSupply: React.FC = () => {
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Typography variant="body1" paragraph>
-              The TSHC token supply is managed through a controlled minting and burning process. 
+              The NTZS token supply is managed through a controlled minting and burning process. 
               New tokens are minted when users deposit TSH (Tanzanian Shillings) to NEDA Pay's account, 
               and tokens are burned when users withdraw TSH.
             </Typography>

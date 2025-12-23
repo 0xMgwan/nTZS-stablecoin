@@ -84,9 +84,15 @@ const Layout: React.FC = () => {
 
   const drawer = (
     <div>
-      <Toolbar>
+      <Toolbar sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box
+          component="img"
+          src="/neda-pay-logo.jpg"
+          alt="nTZS Logo"
+          sx={{ width: 32, height: 32, borderRadius: 1 }}
+        />
         <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold' }}>
-          NEDA Pay Regulatory
+          nTZS Regulatory
         </Typography>
       </Toolbar>
       <Divider />

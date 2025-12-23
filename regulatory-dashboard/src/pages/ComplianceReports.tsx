@@ -49,7 +49,7 @@ const ComplianceReports: React.FC = () => {
   const [reports, setReports] = useState<Report[]>([
     {
       id: '1',
-      name: 'TSHC Monthly Compliance Report - April 2025',
+      name: 'NTZS Monthly Compliance Report - April 2025',
       type: 'monthly',
       date: '2025-04-30',
       status: 'submitted',
@@ -57,7 +57,7 @@ const ComplianceReports: React.FC = () => {
     },
     {
       id: '2',
-      name: 'TSHC Monthly Compliance Report - March 2025',
+      name: 'NTZS Monthly Compliance Report - March 2025',
       type: 'monthly',
       date: '2025-03-31',
       status: 'submitted',
@@ -65,7 +65,7 @@ const ComplianceReports: React.FC = () => {
     },
     {
       id: '3',
-      name: 'TSHC Quarterly Compliance Report - Q1 2025',
+      name: 'NTZS Quarterly Compliance Report - Q1 2025',
       type: 'quarterly',
       date: '2025-03-31',
       status: 'submitted',
@@ -73,7 +73,7 @@ const ComplianceReports: React.FC = () => {
     },
     {
       id: '4',
-      name: 'TSHC Monthly Compliance Report - February 2025',
+      name: 'NTZS Monthly Compliance Report - February 2025',
       type: 'monthly',
       date: '2025-02-28',
       status: 'submitted',
@@ -81,7 +81,7 @@ const ComplianceReports: React.FC = () => {
     },
     {
       id: '5',
-      name: 'TSHC Monthly Compliance Report - January 2025',
+      name: 'NTZS Monthly Compliance Report - January 2025',
       type: 'monthly',
       date: '2025-01-31',
       status: 'submitted',
@@ -89,7 +89,7 @@ const ComplianceReports: React.FC = () => {
     },
     {
       id: '6',
-      name: 'TSHC Annual Compliance Report - 2024',
+      name: 'NTZS Annual Compliance Report - 2024',
       type: 'annual',
       date: '2024-12-31',
       status: 'approved',
@@ -97,7 +97,7 @@ const ComplianceReports: React.FC = () => {
     },
     {
       id: '7',
-      name: 'TSHC Quarterly Compliance Report - Q4 2024',
+      name: 'NTZS Quarterly Compliance Report - Q4 2024',
       type: 'quarterly',
       date: '2024-12-31',
       status: 'approved',
@@ -141,17 +141,17 @@ const ComplianceReports: React.FC = () => {
       let reportDate = '';
       
       if (selectedReport === 'monthly') {
-        reportName = `TSHC Monthly Compliance Report - ${monthName} ${year}`;
+        reportName = `NTZS Monthly Compliance Report - ${monthName} ${year}`;
         reportDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0]; // Last day of month
       } else if (selectedReport === 'quarterly') {
         const quarter = Math.floor((date.getMonth() / 3)) + 1;
-        reportName = `TSHC Quarterly Compliance Report - Q${quarter} ${year}`;
+        reportName = `NTZS Quarterly Compliance Report - Q${quarter} ${year}`;
         
         // Last day of quarter
         const lastMonth = quarter * 3;
         reportDate = new Date(date.getFullYear(), lastMonth, 0).toISOString().split('T')[0];
       } else if (selectedReport === 'annual') {
-        reportName = `TSHC Annual Compliance Report - ${year}`;
+        reportName = `NTZS Annual Compliance Report - ${year}`;
         reportDate = `${year}-12-31`;
       } else if (selectedReport === 'audit') {
         reportName = `External Audit Report - ${year}`;
@@ -450,7 +450,7 @@ const ComplianceReports: React.FC = () => {
                   Central Bank Requirements
                 </Typography>
                 <Typography variant="body2" paragraph>
-                  • Monthly reserve reports showing USDC backing for TSHC
+                  • Monthly reserve reports showing USDC backing for NTZS
                 </Typography>
                 <Typography variant="body2" paragraph>
                   • Quarterly transaction volume and user statistics
@@ -477,7 +477,7 @@ const ComplianceReports: React.FC = () => {
                   • Annual risk assessment and mitigation report
                 </Typography>
                 <Typography variant="body2">
-                  • Immediate reporting of transactions over 10,000 TSHC
+                  • Immediate reporting of transactions over 10,000 NTZS
                 </Typography>
               </Grid>
             </Grid>

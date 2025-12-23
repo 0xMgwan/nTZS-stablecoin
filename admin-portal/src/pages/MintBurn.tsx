@@ -48,7 +48,7 @@ const mockMintBurnHistory = [
     date: '2025-04-16', 
     authorizedBy: 'Admin', 
     organization: 'NEDA Pay',
-    reason: 'Testing TSHC token',
+    reason: 'Testing NTZS token',
     txHash: '0x0859D42FD008D617c087DD386667da51570B1aAB'
   },
   { 
@@ -121,7 +121,7 @@ const MintBurn: React.FC = () => {
         setIsLoading(true);
         try {
           // In a real implementation, we would fetch this from the blockchain
-          // by querying Transfer events from the TSHC contract
+          // by querying Transfer events from the NTZS contract
           // For now, we'll use the mock data
           setMintBurnHistory(mockMintBurnHistory);
         } catch (err: any) {
@@ -260,7 +260,7 @@ const MintBurn: React.FC = () => {
           Mint & Burn Management
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Control the supply of TSHC stablecoin through minting and burning operations
+          Control the supply of NTZS stablecoin through minting and burning operations
         </Typography>
       </Box>
 
@@ -283,7 +283,7 @@ const MintBurn: React.FC = () => {
                 </Typography>
               </Box>
               <Typography variant="h4" fontWeight="bold" color="success.main">
-                {isLoading ? 'Loading...' : totalMinted.toLocaleString()} TSHC
+                {isLoading ? 'Loading...' : totalMinted.toLocaleString()} NTZS
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 Last minted: {mockMintBurnHistory.find(item => item.type === 'Mint')?.date}
@@ -308,7 +308,7 @@ const MintBurn: React.FC = () => {
                 </Typography>
               </Box>
               <Typography variant="h4" fontWeight="bold" color="error.main">
-                {isLoading ? 'Loading...' : totalBurned.toLocaleString()} TSHC
+                {isLoading ? 'Loading...' : totalBurned.toLocaleString()} NTZS
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 Last burned: {mockMintBurnHistory.find(item => item.type === 'Burn')?.date}
@@ -333,7 +333,7 @@ const MintBurn: React.FC = () => {
                 </Typography>
               </Box>
               <Typography variant="h4" fontWeight="bold">
-                {isLoading ? 'Loading...' : netCirculating.toLocaleString()} TSHC
+                {isLoading ? 'Loading...' : netCirculating.toLocaleString()} NTZS
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 Backed by verified reserves at {collateralizationRatio}%
@@ -354,7 +354,7 @@ const MintBurn: React.FC = () => {
         }}
       >
         <Typography variant="h6" fontWeight="medium" gutterBottom>
-          TSHC Supply History
+          NTZS Supply History
         </Typography>
         <Box sx={{ height: 300 }}>
           <Line 
@@ -396,7 +396,7 @@ const MintBurn: React.FC = () => {
             onClick={handleBurnDialogOpen}
             disabled={!isInitialized || !isCorrectNetwork}
           >
-            Burn TSHC
+            Burn NTZS
           </Button>
           <Button 
             startIcon={<AddIcon />} 
@@ -405,7 +405,7 @@ const MintBurn: React.FC = () => {
             onClick={handleMintDialogOpen}
             disabled={!isInitialized || !isCorrectNetwork}
           >
-            Mint TSHC
+            Mint NTZS
           </Button>
         </Box>
       </Box>
@@ -455,7 +455,7 @@ const MintBurn: React.FC = () => {
                     icon={item.type === 'Mint' ? <AddIcon /> : <RemoveIcon />}
                   />
                 </TableCell>
-                <TableCell align="right">{item.amount.toLocaleString()} TSHC</TableCell>
+                <TableCell align="right">{item.amount.toLocaleString()} NTZS</TableCell>
                 <TableCell>{item.authorizedBy}</TableCell>
                 <TableCell>{item.organization}</TableCell>
                 <TableCell>{item.reason}</TableCell>
@@ -479,7 +479,7 @@ const MintBurn: React.FC = () => {
 
       {/* Mint Dialog */}
       <Dialog open={openMintDialog} onClose={handleMintDialogClose} maxWidth="sm" fullWidth>
-        <DialogTitle>Mint TSHC Tokens</DialogTitle>
+        <DialogTitle>Mint NTZS Tokens</DialogTitle>
         <DialogContent>
           {error && (
             <Alert severity="error" sx={{ mt: 2 }}>
@@ -495,12 +495,12 @@ const MintBurn: React.FC = () => {
           
           {mintSuccess ? (
             <Alert severity="success" sx={{ mt: 2 }}>
-              Successfully minted TSHC tokens! Transaction has been submitted to the blockchain.
+              Successfully minted NTZS tokens! Transaction has been submitted to the blockchain.
             </Alert>
           ) : (
             <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Alert severity="info">
-                Minting new TSHC tokens requires proper collateral backing in the reserve.
+                Minting new NTZS tokens requires proper collateral backing in the reserve.
                 Make sure sufficient reserves are available before proceeding.
               </Alert>
               <TextField 
@@ -517,7 +517,7 @@ const MintBurn: React.FC = () => {
                 value={mintAmount}
                 onChange={(e) => setMintAmount(e.target.value)}
                 InputProps={{
-                  endAdornment: <Typography variant="body2">TSHC</Typography>,
+                  endAdornment: <Typography variant="body2">NTZS</Typography>,
                 }}
               />
               <FormControl fullWidth>
@@ -543,7 +543,7 @@ const MintBurn: React.FC = () => {
               />
               <Divider sx={{ my: 1 }} />
               <Typography variant="subtitle2" color="text.secondary">
-                This operation will call the mint function on the TSHC smart contract.
+                This operation will call the mint function on the NTZS smart contract.
                 It requires multi-signature approval and will be recorded on the blockchain.
               </Typography>
             </Box>
@@ -566,7 +566,7 @@ const MintBurn: React.FC = () => {
 
       {/* Burn Dialog */}
       <Dialog open={openBurnDialog} onClose={handleBurnDialogClose} maxWidth="sm" fullWidth>
-        <DialogTitle>Burn TSHC Tokens</DialogTitle>
+        <DialogTitle>Burn NTZS Tokens</DialogTitle>
         <DialogContent>
           {error && (
             <Alert severity="error" sx={{ mt: 2 }}>
@@ -582,12 +582,12 @@ const MintBurn: React.FC = () => {
           
           {burnSuccess ? (
             <Alert severity="success" sx={{ mt: 2 }}>
-              Successfully burned TSHC tokens! Transaction has been submitted to the blockchain.
+              Successfully burned NTZS tokens! Transaction has been submitted to the blockchain.
             </Alert>
           ) : (
             <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Alert severity="warning">
-                Burning TSHC tokens permanently removes them from circulation.
+                Burning NTZS tokens permanently removes them from circulation.
                 This action cannot be undone once confirmed.
               </Alert>
               <TextField 
@@ -597,7 +597,7 @@ const MintBurn: React.FC = () => {
                 value={burnAmount}
                 onChange={(e) => setBurnAmount(e.target.value)}
                 InputProps={{
-                  endAdornment: <Typography variant="body2">TSHC</Typography>,
+                  endAdornment: <Typography variant="body2">NTZS</Typography>,
                 }}
               />
               <FormControl fullWidth>
@@ -623,7 +623,7 @@ const MintBurn: React.FC = () => {
               />
               <Divider sx={{ my: 1 }} />
               <Typography variant="subtitle2" color="text.secondary">
-                This operation will call the burn function on the TSHC smart contract.
+                This operation will call the burn function on the NTZS smart contract.
                 It requires multi-signature approval and will be recorded on the blockchain.
               </Typography>
             </Box>

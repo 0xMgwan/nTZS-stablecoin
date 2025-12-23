@@ -38,7 +38,7 @@ const Login: React.FC = () => {
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', maxWidth: 400 }}>
       <Typography variant="h5" component="h2" gutterBottom fontWeight="bold" textAlign="center">
-        Sign in to manage your TSHC
+        Sign in to manage your NTZS
       </Typography>
       
       <Box sx={{ mt: 3, mb: 2 }}>
@@ -50,7 +50,7 @@ const Login: React.FC = () => {
             <strong>Admin:</strong> admin@nedapay.com / password
           </Typography>
           <Typography variant="body2" color="info.main">
-            For end users to deposit and redeem TSHC tokens
+            For end users to deposit and redeem NTZS tokens
           </Typography>
         </Paper>
       </Box>
@@ -122,7 +122,7 @@ const Login: React.FC = () => {
       <Divider sx={{ mt: 4, mb: 2 }} />
       
       <Typography variant="caption" color="text.secondary" align="center" display="block">
-        This portal is for verified NEDA Pay users to manage their TSHC tokens.
+        This portal is for verified NEDA Pay users to manage their NTZS tokens.
         Complete KYC verification to access all features and increase your transaction limits.
       </Typography>
     </Box>

@@ -206,7 +206,7 @@ const Transactions: React.FC = () => {
           Transaction Monitoring
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Monitor and analyze all TSHC transactions across the network
+          Monitor and analyze all NTZS transactions across the network
         </Typography>
       </Box>
 
@@ -226,7 +226,7 @@ const Transactions: React.FC = () => {
                 Total Volume
               </Typography>
               <Typography variant="h4" fontWeight="bold">
-                {totalVolume.toLocaleString()} TSHC
+                {totalVolume.toLocaleString()} NTZS
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 Across {mockTransactions.length} transactions
@@ -248,7 +248,7 @@ const Transactions: React.FC = () => {
                 Deposits
               </Typography>
               <Typography variant="h4" fontWeight="bold" color="success.main">
-                {totalDeposits.toLocaleString()} TSHC
+                {totalDeposits.toLocaleString()} NTZS
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 {deposits.length} transactions
@@ -270,7 +270,7 @@ const Transactions: React.FC = () => {
                 Withdrawals
               </Typography>
               <Typography variant="h4" fontWeight="bold" color="warning.main">
-                {totalWithdrawals.toLocaleString()} TSHC
+                {totalWithdrawals.toLocaleString()} NTZS
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 {withdrawals.length} transactions
@@ -292,7 +292,7 @@ const Transactions: React.FC = () => {
                 Transfers
               </Typography>
               <Typography variant="h4" fontWeight="bold" color="primary.main">
-                {totalTransfers.toLocaleString()} TSHC
+                {totalTransfers.toLocaleString()} NTZS
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 {transfers.length} transactions
@@ -396,7 +396,7 @@ const Transactions: React.FC = () => {
                     icon={getTypeIcon(tx.type)}
                   />
                 </TableCell>
-                <TableCell align="right">{tx.amount.toLocaleString()} TSHC</TableCell>
+                <TableCell align="right">{tx.amount.toLocaleString()} NTZS</TableCell>
                 <TableCell>
                   <Tooltip title={tx.from}>
                     <Typography variant="body2" sx={{ maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>

@@ -143,7 +143,7 @@ const DashboardLayout: React.FC = () => {
             {open ? <ChevronLeftIcon /> : <MenuIcon />}
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            TSHC
+            NTZS
           </Typography>
           
           {/* Wallet Connect */}
@@ -193,8 +193,8 @@ const DashboardLayout: React.FC = () => {
                 <MintIcon fontSize="small" color="success" />
               </ListItemIcon>
               <ListItemText 
-                primary="New TSHC Minted" 
-                secondary="500,000 TSHC was minted by Bank of Tanzania"
+                primary="New NTZS Minted" 
+                secondary="500,000 NTZS was minted by Bank of Tanzania"
               />
             </MenuItem>
             <MenuItem onClick={handleNotificationMenuClose}>
@@ -294,9 +294,9 @@ const DashboardLayout: React.FC = () => {
         <Box sx={{ overflow: 'auto', mt: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
             <img 
-              src="/images/neda-pay-logo.svg" 
-              alt="NEDA Pay Logo" 
-              style={{ height: 40, width: 'auto' }} 
+              src="/images/neda-pay-logo.jpg" 
+              alt="nTZS Logo" 
+              style={{ height: 40, width: 'auto', borderRadius: 8 }} 
             />
           </Box>
           <Divider />

@@ -41,7 +41,7 @@ const bankDetails = {
   accountName: 'NEDA Pay Ltd',
   accountNumber: '0150123456700',
   branch: 'Dar es Salaam Main',
-  reference: 'TSHC-',
+  reference: 'NTZS-',
 };
 
 // Mock mobile money details
@@ -49,7 +49,7 @@ const mobileMoneyDetails = {
   provider: 'M-Pesa',
   number: '0755123456',
   accountName: 'NEDA Pay',
-  reference: 'TSHC-',
+  reference: 'NTZS-',
 };
 
 const Deposit: React.FC = () => {
@@ -57,7 +57,7 @@ const Deposit: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('bank');
   const [amount, setAmount] = useState('');
-  const [reference, setReference] = useState(`TSHC-${Math.floor(100000 + Math.random() * 900000)}`);
+  const [reference, setReference] = useState(`NTZS-${Math.floor(100000 + Math.random() * 900000)}`);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [depositConfirmed, setDepositConfirmed] = useState(false);
   const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
@@ -117,7 +117,7 @@ const Deposit: React.FC = () => {
     // Reset the form
     setActiveStep(0);
     setAmount('');
-    setReference(`TSHC-${Math.floor(100000 + Math.random() * 900000)}`);
+    setReference(`NTZS-${Math.floor(100000 + Math.random() * 900000)}`);
     setDepositConfirmed(false);
   };
 
@@ -128,7 +128,7 @@ const Deposit: React.FC = () => {
           Deposit TSH
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Deposit Tanzanian Shillings to mint TSHC tokens
+          Deposit Tanzanian Shillings to mint NTZS tokens
         </Typography>
       </Box>
 
@@ -246,7 +246,7 @@ const Deposit: React.FC = () => {
 
             <Alert severity="info" sx={{ mb: 2 }}>
               <AlertTitle>Minimum Deposit</AlertTitle>
-              The minimum deposit amount is TSH 10,000. You will receive an equivalent amount of TSHC tokens.
+              The minimum deposit amount is TSH 10,000. You will receive an equivalent amount of NTZS tokens.
             </Alert>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
@@ -420,7 +420,7 @@ const Deposit: React.FC = () => {
             <Alert severity="info" sx={{ mb: 3 }}>
               <AlertTitle>Verification Process</AlertTitle>
               After confirmation, our team will verify your deposit. This typically takes 1-2 business hours during working days.
-              Once verified, TSHC tokens will be minted to your wallet.
+              Once verified, NTZS tokens will be minted to your wallet.
             </Alert>
 
             <Card variant="outlined" sx={{ mb: 3 }}>
@@ -442,8 +442,8 @@ const Deposit: React.FC = () => {
                     <Typography variant="body1">{reference}</Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography variant="body2" color="text.secondary">Expected TSHC Tokens</Typography>
-                    <Typography variant="body1">{amount} TSHC</Typography>
+                    <Typography variant="body2" color="text.secondary">Expected NTZS Tokens</Typography>
+                    <Typography variant="body1">{amount} NTZS</Typography>
                   </Grid>
                 </Grid>
               </CardContent>
@@ -483,7 +483,7 @@ const Deposit: React.FC = () => {
             Thank you for your deposit of TSH {amount}. Your transaction has been recorded with reference number: {reference}.
           </Typography>
           <Typography variant="body1" paragraph>
-            Our team will verify your payment and mint {amount} TSHC tokens to your wallet. This process typically takes 1-2 business hours during working days.
+            Our team will verify your payment and mint {amount} NTZS tokens to your wallet. This process typically takes 1-2 business hours during working days.
           </Typography>
           <Typography variant="body1">
             You can track the status of your deposit in the Transactions section.
@@ -506,10 +506,10 @@ const Deposit: React.FC = () => {
           <Paper elevation={2} sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <InfoIcon color="primary" sx={{ mr: 1 }} />
-              <Typography variant="h6">About TSHC Tokens</Typography>
+              <Typography variant="h6">About NTZS Tokens</Typography>
             </Box>
             <Typography variant="body2" color="text.secondary">
-              TSHC is a stablecoin backed 1:1 by Tanzanian Shillings (TSH). Each TSHC token is worth exactly 1 TSH and can be redeemed at any time.
+              NTZS is a stablecoin backed 1:1 by Tanzanian Shillings (TSH). Each NTZS token is worth exactly 1 TSH and can be redeemed at any time.
               The tokens are stored in your digital wallet and can be used for various transactions on the NEDA Pay platform.
             </Typography>
           </Paper>
@@ -521,7 +521,7 @@ const Deposit: React.FC = () => {
               <Typography variant="h6">Deposit Processing</Typography>
             </Box>
             <Typography variant="body2" color="text.secondary">
-              After you confirm your deposit, our team will verify the payment with our banking partners. Once verified, the equivalent amount of TSHC tokens will be minted to your wallet automatically. You'll receive a notification when the process is complete.
+              After you confirm your deposit, our team will verify the payment with our banking partners. Once verified, the equivalent amount of NTZS tokens will be minted to your wallet automatically. You'll receive a notification when the process is complete.
             </Typography>
           </Paper>
         </Grid>

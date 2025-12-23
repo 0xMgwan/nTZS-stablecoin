@@ -1200,7 +1200,7 @@ const KycManagement: React.FC = () => {
                   Designated Wallet for Minting & Burning
                 </Typography>
                 <Typography variant="body2" color="text.secondary" paragraph>
-                  Please provide the Ethereum wallet address that will be used for minting and burning TSHC tokens.
+                  Please provide the Ethereum wallet address that will be used for minting and burning NTZS tokens.
                 </Typography>
                 <TextField
                   fullWidth

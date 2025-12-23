@@ -111,7 +111,7 @@ const Dashboard: React.FC = () => {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
     datasets: [
       {
-        label: 'Transaction Volume (TSHC)',
+        label: 'Transaction Volume (NTZS)',
         data: [3200000, 4100000, 3800000, 5200000, 4800000, 5500000, 6200000],
         borderColor: theme.palette.primary.main,
         backgroundColor: theme.palette.primary.light + '40',
@@ -156,7 +156,7 @@ const Dashboard: React.FC = () => {
   const recentActivity = [
     { 
       type: 'mint', 
-      amount: '1,000,000 TSHC', 
+      amount: '1,000,000 NTZS', 
       organization: 'Bank of Tanzania', 
       time: '2 hours ago',
       icon: <MintIcon color="success" />
@@ -170,7 +170,7 @@ const Dashboard: React.FC = () => {
     },
     { 
       type: 'transaction', 
-      amount: '500,000 TSHC', 
+      amount: '500,000 NTZS', 
       from: 'Reserve', 
       to: 'Distribution', 
       time: '1 day ago',
@@ -191,16 +191,16 @@ const Dashboard: React.FC = () => {
     { 
       title: 'Total Supply', 
       value: isInitialized && isCorrectNetwork ? 
-        `${parseFloat(totalSupply).toLocaleString()} TSHC` : 
-        '-- TSHC', 
+        `${parseFloat(totalSupply).toLocaleString()} NTZS` : 
+        '-- NTZS', 
       change: '+5.2%', 
       trend: 'up' 
     },
     { 
       title: 'Circulating Supply', 
       value: isInitialized && isCorrectNetwork ? 
-        `${parseFloat(totalSupply).toLocaleString()} TSHC` : 
-        '-- TSHC', 
+        `${parseFloat(totalSupply).toLocaleString()} NTZS` : 
+        '-- NTZS', 
       change: '+3.8%', 
       trend: 'up' 
     },
@@ -227,7 +227,7 @@ const Dashboard: React.FC = () => {
           Dashboard
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Overview of the TSHC stablecoin ecosystem and operations
+          Overview of the NTZS stablecoin ecosystem and operations
         </Typography>
       </Box>
 
@@ -247,12 +247,12 @@ const Dashboard: React.FC = () => {
           >
             <Box sx={{ mb: 2 }}>
               <Typography variant="h6" component="div" gutterBottom>
-                Your TSHC Balance
+                Your NTZS Balance
               </Typography>
               <Typography variant="h4" component="div" fontWeight="bold">
                 {isInitialized && isCorrectNetwork && account ? 
-                  `${parseFloat(userBalance).toLocaleString()} TSHC` : 
-                  '-- TSHC'}
+                  `${parseFloat(userBalance).toLocaleString()} NTZS` : 
+                  '-- NTZS'}
               </Typography>
               {!account && (
                 <Button 
@@ -300,8 +300,8 @@ const Dashboard: React.FC = () => {
               </Typography>
               <Typography variant="h4" component="div" fontWeight="bold">
                 {isInitialized && isCorrectNetwork ? 
-                  `${parseFloat(totalSupply).toLocaleString()} TSHC` : 
-                  '-- TSHC'}
+                  `${parseFloat(totalSupply).toLocaleString()} NTZS` : 
+                  '-- NTZS'}
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
                 <TrendingUpIcon 
@@ -382,7 +382,7 @@ const Dashboard: React.FC = () => {
             Connect your wallet to see real-time blockchain data
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            You need to connect your wallet to view the current state of the TSHC smart contracts
+            You need to connect your wallet to view the current state of the NTZS smart contracts
           </Typography>
           <Button
             variant="contained"
@@ -455,7 +455,7 @@ const Dashboard: React.FC = () => {
               <Typography variant="h6" fontWeight="medium">
                 Reserve Allocation
               </Typography>
-              <Tooltip title="Collateral backing the TSHC stablecoin">
+              <Tooltip title="Collateral backing the NTZS stablecoin">
                 <IconButton size="small">
                   <InfoIcon fontSize="small" />
                 </IconButton>
@@ -480,7 +480,7 @@ const Dashboard: React.FC = () => {
                 Fully Backed (102.5%)
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                All TSHC tokens are backed by verified reserve assets
+                All NTZS tokens are backed by verified reserve assets
               </Typography>
             </Box>
           </Paper>

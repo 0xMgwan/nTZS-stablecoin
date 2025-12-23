@@ -128,10 +128,10 @@ const Redeem: React.FC = () => {
     <Box>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
-          Redeem TSHC
+          Redeem NTZS
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Convert your TSHC tokens back to Tanzanian Shillings
+          Convert your NTZS tokens back to Tanzanian Shillings
         </Typography>
       </Box>
 
@@ -231,25 +231,25 @@ const Redeem: React.FC = () => {
               Enter Redemption Amount
             </Typography>
             <Typography variant="body2" color="text.secondary" paragraph>
-              Specify how many TSHC tokens you would like to redeem
+              Specify how many NTZS tokens you would like to redeem
             </Typography>
 
             <TextField
               fullWidth
-              label="Amount (TSHC)"
+              label="Amount (NTZS)"
               variant="outlined"
               type="number"
               value={amount}
               onChange={handleAmountChange}
               InputProps={{
-                startAdornment: <Typography sx={{ mr: 1 }}>TSHC</Typography>,
+                startAdornment: <Typography sx={{ mr: 1 }}>NTZS</Typography>,
               }}
               sx={{ mb: 2 }}
             />
 
             <Alert severity="info" sx={{ mb: 2 }}>
               <AlertTitle>Minimum Redemption</AlertTitle>
-              The minimum redemption amount is 10,000 TSHC. You will receive an equivalent amount in TSH minus any applicable fees.
+              The minimum redemption amount is 10,000 NTZS. You will receive an equivalent amount in TSH minus any applicable fees.
             </Alert>
 
             <Alert severity="warning" sx={{ mb: 2 }}>
@@ -393,7 +393,7 @@ const Redeem: React.FC = () => {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <Typography variant="body2" color="text.secondary">Amount to Redeem</Typography>
-                    <Typography variant="body1">{amount} TSHC</Typography>
+                    <Typography variant="body1">{amount} NTZS</Typography>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Typography variant="body2" color="text.secondary">Payout Method</Typography>
@@ -454,7 +454,7 @@ const Redeem: React.FC = () => {
 
             <Alert severity="warning" sx={{ mb: 3 }}>
               <AlertTitle>Important Notice</AlertTitle>
-              By confirming this redemption, you authorize NEDA Pay to burn {amount} TSHC tokens from your wallet and transfer the equivalent amount in TSH to your specified account.
+              By confirming this redemption, you authorize NEDA Pay to burn {amount} NTZS tokens from your wallet and transfer the equivalent amount in TSH to your specified account.
               This action cannot be reversed once processed.
             </Alert>
 
@@ -489,7 +489,7 @@ const Redeem: React.FC = () => {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body1" paragraph>
-            Your request to redeem {amount} TSHC has been submitted successfully.
+            Your request to redeem {amount} NTZS has been submitted successfully.
           </Typography>
           <Typography variant="body1" paragraph>
             The tokens will be burned from your wallet, and the equivalent amount in TSH will be transferred to your {payoutMethod === 'bank' ? 'bank account' : 'mobile money account'} within 1-2 business days.
@@ -518,8 +518,8 @@ const Redeem: React.FC = () => {
               <Typography variant="h6">About Redemption</Typography>
             </Box>
             <Typography variant="body2" color="text.secondary">
-              When you redeem TSHC tokens, they are burned (removed from circulation), and the equivalent amount in TSH is transferred to your specified account.
-              This maintains the 1:1 backing of all TSHC tokens in circulation.
+              When you redeem NTZS tokens, they are burned (removed from circulation), and the equivalent amount in TSH is transferred to your specified account.
+              This maintains the 1:1 backing of all NTZS tokens in circulation.
             </Typography>
           </Paper>
         </Grid>

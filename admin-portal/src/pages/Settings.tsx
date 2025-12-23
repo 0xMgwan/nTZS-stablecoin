@@ -84,10 +84,10 @@ const Settings: React.FC = () => {
   const { user } = useAuth();
   const { account } = useWeb3();
 
-  // Mock API keys
+  // Mock API keys (placeholder values)
   const [apiKeys, setApiKeys] = useState({
-    liveKey: 'sk_live_51NxYz2CZ6qKUzXjE2WdH8TvMnFJk3L7mR9pQs5oTg6bVcXwZ1yA',
-    testKey: 'sk_test_51NxYz2CZ6qKUzXjE2WdH8TvMnFJk3L7mR9pQs5oTg6bVcXwZ1yA'
+    liveKey: 'ntzs_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    testKey: 'ntzs_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
   });
 
   useEffect(() => {
@@ -137,8 +137,8 @@ const Settings: React.FC = () => {
     // Here you would call your API to regenerate the key
     // For now, we'll just simulate it
     const newKey = type === 'live' 
-      ? 'sk_live_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-      : 'sk_test_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      ? 'ntzs_live_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+      : 'ntzs_test_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     
     setApiKeys(prev => ({
       ...prev,

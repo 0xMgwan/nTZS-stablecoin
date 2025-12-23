@@ -251,10 +251,10 @@ class Web3Service {
     }
   }
 
-  // TSHC Token Functions
+  // NTZS Token Functions
 
   /**
-   * Get the total supply of TSHC
+   * Get the total supply of NTZS
    */
   async getTotalSupply(): Promise<string> {
     try {
@@ -291,7 +291,7 @@ class Web3Service {
   }
 
   /**
-   * Get the balance of TSHC for a specific address
+   * Get the balance of NTZS for a specific address
    */
   async getBalance(address: string): Promise<string> {
     try {
@@ -306,7 +306,7 @@ class Web3Service {
   }
 
   /**
-   * Mint TSHC tokens to a specific address
+   * Mint NTZS tokens to a specific address
    */
   async mintTokens(to: string, amount: string): Promise<TransactionResponse> {
     try {
@@ -321,7 +321,7 @@ class Web3Service {
   }
 
   /**
-   * Burn TSHC tokens
+   * Burn NTZS tokens
    */
   async burnTokens(amount: string): Promise<TransactionResponse> {
     try {
@@ -496,9 +496,9 @@ class Web3Service {
   }
 
   /**
-   * Deposit collateral and mint TSHC
+   * Deposit collateral and mint NTZS
    */
-  async depositCollateralAndMintTSHC(
+  async depositCollateralAndMintNTZS(
     tokenAddress: string,
     amount: string
   ): Promise<TransactionResponse> {
@@ -506,7 +506,7 @@ class Web3Service {
       if (!this.reserveContract) throw new Error('Reserve contract not initialized');
       
       const amountInWei = parseUnits(amount, 18);
-      return await this.reserveContract.depositCollateralAndMintTSHC(tokenAddress, amountInWei);
+      return await this.reserveContract.depositCollateralAndMintNTZS(tokenAddress, amountInWei);
     } catch (error) {
       console.error('Error depositing collateral:', error);
       throw error;
@@ -514,17 +514,17 @@ class Web3Service {
   }
 
   /**
-   * Burn TSHC and withdraw collateral
+   * Burn NTZS and withdraw collateral
    */
-  async burnTSHCAndWithdrawCollateral(
+  async burnNTZSAndWithdrawCollateral(
     tokenAddress: string,
-    tshcAmount: string
+    ntzsAmount: string
   ): Promise<TransactionResponse> {
     try {
       if (!this.reserveContract) throw new Error('Reserve contract not initialized');
       
-      const amountInWei = ethers.parseUnits(tshcAmount, 18);
-      return await this.reserveContract.burnTSHCAndWithdrawCollateral(tokenAddress, amountInWei);
+      const amountInWei = ethers.parseUnits(ntzsAmount, 18);
+      return await this.reserveContract.burnNTZSAndWithdrawCollateral(tokenAddress, amountInWei);
     } catch (error) {
       console.error('Error withdrawing collateral:', error);
       throw error;
@@ -534,7 +534,7 @@ class Web3Service {
   // Event listeners
 
   /**
-   * Listen for TSHC transfer events
+   * Listen for NTZS transfer events
    */
   listenForTransfers(callback: (from: string, to: string, amount: string) => void): void {
     if (!this.ntzsContract) {
@@ -565,19 +565,19 @@ class Web3Service {
    * Listen for collateral deposit events
    */
   listenForCollateralDeposits(
-    callback: (user: string, token: string, amount: string, tshcMinted: string) => void
+    callback: (user: string, token: string, amount: string, ntzsMinted: string) => void
   ): void {
     if (!this.reserveContract) {
       console.error('Reserve contract not initialized');
       return;
     }
     
-    this.reserveContract.on('CollateralDeposited', (user, token, amount, tshcMinted) => {
+    this.reserveContract.on('CollateralDeposited', (user, token, amount, ntzsMinted) => {
       callback(
         user,
         token,
         formatUnits(amount, 18),
-        formatUnits(tshcMinted, 18)
+        formatUnits(ntzsMinted, 18)
       );
     });
   }
@@ -586,19 +586,19 @@ class Web3Service {
    * Listen for collateral withdrawal events
    */
   listenForCollateralWithdrawals(
-    callback: (user: string, token: string, amount: string, tshcBurned: string) => void
+    callback: (user: string, token: string, amount: string, ntzsBurned: string) => void
   ): void {
     if (!this.reserveContract) {
       console.error('Reserve contract not initialized');
       return;
     }
     
-    this.reserveContract.on('CollateralWithdrawn', (user, token, amount, tshcBurned) => {
+    this.reserveContract.on('CollateralWithdrawn', (user, token, amount, ntzsBurned) => {
       callback(
         user,
         token,
         formatUnits(amount, 18),
-        formatUnits(tshcBurned, 18)
+        formatUnits(ntzsBurned, 18)
       );
     });
   }

@@ -154,19 +154,18 @@ const Login: React.FC = () => {
               : '0 8px 32px rgba(0, 0, 0, 0.1)',
           }}
         >
-          <Avatar 
+          <Box
+            component="img"
+            src="/neda-pay-logo.jpg"
+            alt="nTZS Logo"
             sx={{ 
               width: 80, 
               height: 80, 
               mb: 2,
-              background: mode === 'dark' 
-                ? 'linear-gradient(45deg, #304ffe 30%, #1e88e5 90%)'
-                : 'linear-gradient(45deg, #1976d2 30%, #42a5f5 90%)',
+              borderRadius: 2,
               boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)'
             }}
-          >
-            <AccountBalanceOutlined sx={{ fontSize: 40 }} />
-          </Avatar>
+          />
           
           <Typography 
             variant="h6" 
@@ -190,7 +189,7 @@ const Login: React.FC = () => {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
           }}>
-            NEDA Pay
+            nTZS
           </Typography>
           
           <Typography component="h2" variant="h6" sx={{ 

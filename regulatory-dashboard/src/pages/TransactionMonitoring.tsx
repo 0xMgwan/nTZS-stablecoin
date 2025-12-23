@@ -78,7 +78,7 @@ const TransactionMonitoring: React.FC = () => {
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
       },
       {
-        label: 'Transaction Volume (TSHC)',
+        label: 'Transaction Volume (NTZS)',
         data: [28, 48, 40, 19, 86, 27, 90].map(x => x * 100),
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
@@ -356,7 +356,7 @@ const TransactionMonitoring: React.FC = () => {
                 {transactions.filter(tx => tx.type === 'mint').length}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                New TSHC tokens created
+                New NTZS tokens created
               </Typography>
             </CardContent>
           </Card>
@@ -372,7 +372,7 @@ const TransactionMonitoring: React.FC = () => {
                 {transactions.filter(tx => tx.type === 'burn').length}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                TSHC tokens removed from circulation
+                NTZS tokens removed from circulation
               </Typography>
             </CardContent>
           </Card>
@@ -478,7 +478,7 @@ const TransactionMonitoring: React.FC = () => {
                         <TableCell>Type</TableCell>
                         <TableCell>From</TableCell>
                         <TableCell>To</TableCell>
-                        <TableCell>Amount (TSHC)</TableCell>
+                        <TableCell>Amount (NTZS)</TableCell>
                         <TableCell>Status</TableCell>
                         <TableCell>Transaction Hash</TableCell>
                       </TableRow>
@@ -550,12 +550,12 @@ const TransactionMonitoring: React.FC = () => {
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Typography variant="body1" paragraph>
-              All TSHC transactions are recorded on the Base blockchain and can be monitored in real-time.
+              All NTZS transactions are recorded on the Base blockchain and can be monitored in real-time.
               Regulatory authorities have access to this dashboard to track token movements, mint/burn operations,
               and ensure compliance with anti-money laundering (AML) and know-your-customer (KYC) regulations.
             </Typography>
             <Typography variant="body1" paragraph>
-              Large transactions (over 10,000 TSHC) are automatically flagged for review, and suspicious
+              Large transactions (over 10,000 NTZS) are automatically flagged for review, and suspicious
               transaction patterns are reported to the appropriate authorities as required by law.
             </Typography>
             <Typography variant="body1">
