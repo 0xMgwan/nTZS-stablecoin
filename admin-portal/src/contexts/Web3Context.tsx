@@ -309,23 +309,8 @@ export const Web3Provider: React.FC<Web3ProviderProps> = ({ children }) => {
         refreshData();
       });
       
-      // Listen for batch operations
-      web3Service.listenForBatchOperations((batchId, isMint) => {
-        // Refresh data when batch operations are created
-        refreshData();
-      });
-      
-      // Listen for collateral deposits
-      web3Service.listenForCollateralDeposits((user, token, amount, tshcMinted) => {
-        // Refresh data when collateral is deposited
-        refreshData();
-      });
-      
-      // Listen for collateral withdrawals
-      web3Service.listenForCollateralWithdrawals((user, token, amount, tshcBurned) => {
-        // Refresh data when collateral is withdrawn
-        refreshData();
-      });
+      // Note: Batch operations and collateral events are not available in SimpleNTZS
+      // These listeners are disabled until the full system is deployed
       
       return () => {
         // Remove all listeners when component unmounts

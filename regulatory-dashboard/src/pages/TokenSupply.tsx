@@ -34,7 +34,7 @@ ChartJS.register(
 
 const TokenSupply: React.FC = () => {
   const { 
-    tshcContract, 
+    ntzsContract, 
     totalSupply, 
     circulatingSupply, 
     isLoading, 
@@ -72,10 +72,10 @@ const TokenSupply: React.FC = () => {
 
   useEffect(() => {
     fetchTokenEvents();
-  }, [tshcContract]);
+  }, [ntzsContract]);
 
   const fetchTokenEvents = async () => {
-    if (!tshcContract) return;
+    if (!ntzsContract) return;
 
     setIsLoadingEvents(true);
     setEventError(null);

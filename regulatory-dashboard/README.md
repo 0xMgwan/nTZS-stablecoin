@@ -21,9 +21,9 @@ The NEDA Pay Regulatory Dashboard offers comprehensive monitoring tools for regu
 
 ## Technical Details
 
-The dashboard connects to the TSHC and Reserve smart contracts deployed on the Base network:
+The dashboard connects to the NTZS and Reserve smart contracts deployed on the Base Sepolia testnet:
 
-- SimpleTSHC: `0x0859D42FD008D617c087DD386667da51570B1aAB`
+- SimpleNTZS: `0x2bD2305bDB279a532620d76D0c352F35B48ef2C0`
 - SimpleReserve: `0x72Ff093CEA6035fa395c0910B006af2DC4D4E9F5`
 
 ## Features

@@ -1,16 +1,16 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { ethers } from 'ethers';
-import TSHC_ABI from '../contracts/abis/TSHC.json';
+import NTZS_ABI from '../contracts/abis/NTZS.json';
 import RESERVE_ABI from '../contracts/abis/Reserve.json';
 
-// Contract addresses from memory
-const TSHC_ADDRESS = '0x0859D42FD008D617c087DD386667da51570B1aAB';
+// Contract addresses - Base Sepolia testnet
+const NTZS_ADDRESS = '0x2bD2305bDB279a532620d76D0c352F35B48ef2C0';
 const RESERVE_ADDRESS = '0x72Ff093CEA6035fa395c0910B006af2DC4D4E9F5';
 const USDC_ADDRESS = '0x4ecD2810a6A412fdc95B71c03767068C35D23fE3';
 
 interface BlockchainContextType {
   provider: ethers.providers.Provider | null;
-  tshcContract: ethers.Contract | null;
+  ntzsContract: ethers.Contract | null;
   reserveContract: ethers.Contract | null;
   totalSupply: string;
   circulatingSupply: string;
@@ -37,7 +37,7 @@ interface BlockchainProviderProps {
 
 export const BlockchainProvider: React.FC<BlockchainProviderProps> = ({ children }) => {
   const [provider, setProvider] = useState<ethers.providers.Provider | null>(null);
-  const [tshcContract, setTshcContract] = useState<ethers.Contract | null>(null);
+  const [ntzsContract, setNtzsContract] = useState<ethers.Contract | null>(null);
   const [reserveContract, setReserveContract] = useState<ethers.Contract | null>(null);
   const [totalSupply, setTotalSupply] = useState<string>('0');
   const [circulatingSupply, setCirculatingSupply] = useState<string>('0');
@@ -50,13 +50,10 @@ export const BlockchainProvider: React.FC<BlockchainProviderProps> = ({ children
   useEffect(() => {
     const initProvider = async () => {
       try {
-        // Use multiple RPC endpoints with fallback mechanism
+        // Use Base Sepolia testnet RPC endpoints
         const rpcUrls = [
-          'https://base-rpc.publicnode.com/',
-          'https://mainnet.base.org',
-          'https://base-mainnet.g.alchemy.com/v2/demo',
-          'https://base.llamarpc.com',
-          'https://1rpc.io/base'
+          'https://sepolia.base.org',
+          'https://base-sepolia-rpc.publicnode.com'
         ];
 
         // Try to connect to each RPC endpoint
@@ -79,14 +76,14 @@ export const BlockchainProvider: React.FC<BlockchainProviderProps> = ({ children
         setProvider(connectedProvider);
 
         // Initialize contracts
-        const tshc = new ethers.Contract(TSHC_ADDRESS, TSHC_ABI.abi, connectedProvider);
+        const ntzs = new ethers.Contract(NTZS_ADDRESS, NTZS_ABI.abi, connectedProvider);
         const reserve = new ethers.Contract(RESERVE_ADDRESS, RESERVE_ABI.abi, connectedProvider);
 
-        setTshcContract(tshc);
+        setNtzsContract(ntzs);
         setReserveContract(reserve);
 
         // Load initial data
-        await fetchContractData(tshc, reserve);
+        await fetchContractData(ntzs, reserve);
       } catch (err) {
         console.error('Failed to initialize blockchain connection:', err);
         setError('Failed to connect to the blockchain. Please try again later.');
@@ -98,7 +95,7 @@ export const BlockchainProvider: React.FC<BlockchainProviderProps> = ({ children
   }, []);
 
   const fetchContractData = async (
-    tshc: ethers.Contract,
+    ntzs: ethers.Contract,
     reserve: ethers.Contract
   ) => {
     try {
@@ -136,14 +133,14 @@ export const BlockchainProvider: React.FC<BlockchainProviderProps> = ({ children
   };
 
   const refreshData = async () => {
-    if (tshcContract && reserveContract) {
-      await fetchContractData(tshcContract, reserveContract);
+    if (ntzsContract && reserveContract) {
+      await fetchContractData(ntzsContract, reserveContract);
     }
   };
 
   const value = {
     provider,
-    tshcContract,
+    ntzsContract,
     reserveContract,
     totalSupply,
     circulatingSupply,

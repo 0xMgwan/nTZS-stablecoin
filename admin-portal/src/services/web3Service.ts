@@ -6,10 +6,9 @@ import {
   Network,
   TransactionResponse,
   formatUnits,
-  parseUnits,
-  toBeHex
+  parseUnits
 } from 'ethers';
-import TSHC_ABI from '../contracts/abis/TSHC.json';
+import NTZS_ABI from '../contracts/abis/NTZS.json';
 import RESERVE_ABI from '../contracts/abis/Reserve.json';
 
 // Role management constants
@@ -19,7 +18,7 @@ const ADMIN_ROLE = '0xa49807205ce4d355092ef5a8a18f56e8913cf4a201fbe287825b095693
 // Contract addresses - these would come from environment variables in production
 const CONTRACT_ADDRESSES = {
   // Base Sepolia testnet addresses
-  TSHC: '0x0859D42FD008D617c087DD386667da51570B1aAB', // SimpleTSHC deployed address
+  NTZS: '0x2bD2305bDB279a532620d76D0c352F35B48ef2C0', // SimpleNTZS deployed address
   RESERVE: '0x72Ff093CEA6035fa395c0910B006af2DC4D4E9F5', // SimpleReserve deployed address
   TEST_USDC: '0x4ecD2810a6A412fdc95B71c03767068C35D23fE3', // TestUSDC deployed address
   PRICE_ORACLE: '0xe4A05fca88C4F10fe6d844B75025E3415dFe6170', // SimplePriceOracle deployed address
@@ -51,7 +50,7 @@ const NETWORK_CONFIG = {
 class Web3Service {
   private provider: BrowserProvider | null = null;
   private signer: Signer | null = null;
-  private tshcContract: Contract | null = null;
+  private ntzsContract: Contract | null = null;
   private reserveContract: Contract | null = null;
   private isInitialized: boolean = false;
   private useMockData: boolean = false;
@@ -87,8 +86,8 @@ class Web3Service {
         this.signer = await this.provider.getSigner();
         
         // Validate contract ABIs before initializing
-        if (!TSHC_ABI.abi || !Array.isArray(TSHC_ABI.abi)) {
-          console.warn('Invalid TSHC ABI format. Using fallback ABI.');
+        if (!NTZS_ABI.abi || !Array.isArray(NTZS_ABI.abi)) {
+          console.warn('Invalid NTZS ABI format. Using fallback ABI.');
           // If we were in production, we would use a fallback ABI here
         }
         
@@ -98,9 +97,9 @@ class Web3Service {
         }
         
         // Initialize contracts
-        this.tshcContract = new Contract(
-          CONTRACT_ADDRESSES.TSHC,
-          TSHC_ABI.abi,
+        this.ntzsContract = new Contract(
+          CONTRACT_ADDRESSES.NTZS,
+          NTZS_ABI.abi,
           this.signer
         );
         
@@ -113,15 +112,15 @@ class Web3Service {
         // Verify contracts are deployed at the specified addresses
         try {
           // Try a simple call to check if contract exists
-          await this.tshcContract.symbol();
+          await this.ntzsContract.symbol();
         } catch (contractError) {
-          console.warn('TSHC contract verification failed. Using mock mode.', contractError);
+          console.warn('NTZS contract verification failed. Using mock mode.', contractError);
           this.useMockData = true;
         }
         
         try {
-          // Try a simple call to check if contract exists
-          await this.reserveContract.symbol();
+          // Try a simple call to check if Reserve contract exists (it doesn't have symbol())
+          await this.reserveContract.minimumCollateralRatio();
         } catch (contractError) {
           console.warn('Reserve contract verification failed. Using mock mode.', contractError);
           this.useMockData = true;
@@ -154,7 +153,7 @@ class Web3Service {
       // Reset all state
       this.provider = null;
       this.signer = null;
-      this.tshcContract = null;
+      this.ntzsContract = null;
       this.reserveContract = null;
       this.isInitialized = false;
       this.useMockData = false;
@@ -224,7 +223,7 @@ class Web3Service {
     try {
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: toBeHex(NETWORK_CONFIG.chainId) }],
+        params: [{ chainId: '0x' + NETWORK_CONFIG.chainId.toString(16) }],
       });
       return true;
     } catch (error: any) {
@@ -235,7 +234,7 @@ class Web3Service {
             method: 'wallet_addEthereumChain',
             params: [
               {
-                chainId: toBeHex(NETWORK_CONFIG.chainId),
+                chainId: '0x' + NETWORK_CONFIG.chainId.toString(16),
                 chainName: NETWORK_CONFIG.name,
                 rpcUrls: [NETWORK_CONFIG.rpcUrl],
               },
@@ -259,7 +258,7 @@ class Web3Service {
    */
   async getTotalSupply(): Promise<string> {
     try {
-      if (!this.tshcContract) throw new Error('TSHC contract not initialized');
+      if (!this.ntzsContract) throw new Error('NTZS contract not initialized');
       
       // Check if we're on the correct network before proceeding
       const isCorrect = await this.isCorrectNetwork();
@@ -274,8 +273,8 @@ class Web3Service {
       }
       
       try {
-        const totalSupply = await this.tshcContract.totalSupply();
-        return formatUnits(totalSupply, 18);
+        const totalSupply = await this.ntzsContract.totalSupply();
+        return formatUnits(totalSupply, 2); // NTZS uses 2 decimals
       } catch (contractError: any) {
         // Handle BAD_DATA errors which might occur if the contract ABI doesn't match
         if (contractError.code === 'BAD_DATA') {
@@ -296,10 +295,10 @@ class Web3Service {
    */
   async getBalance(address: string): Promise<string> {
     try {
-      if (!this.tshcContract) throw new Error('TSHC contract not initialized');
+      if (!this.ntzsContract) throw new Error('NTZS contract not initialized');
       
-      const balance = await this.tshcContract.balanceOf(address);
-      return formatUnits(balance, 18);
+      const balance = await this.ntzsContract.balanceOf(address);
+      return formatUnits(balance, 2); // NTZS uses 2 decimals
     } catch (error) {
       console.error('Error getting balance:', error);
       throw error;
@@ -311,10 +310,10 @@ class Web3Service {
    */
   async mintTokens(to: string, amount: string): Promise<TransactionResponse> {
     try {
-      if (!this.tshcContract) throw new Error('TSHC contract not initialized');
+      if (!this.ntzsContract) throw new Error('NTZS contract not initialized');
       
-      const amountInWei = parseUnits(amount, 18);
-      return await this.tshcContract.mint(to, amountInWei);
+      const amountInWei = parseUnits(amount, 2); // NTZS uses 2 decimals
+      return await this.ntzsContract.mint(to, amountInWei);
     } catch (error) {
       console.error('Error minting tokens:', error);
       throw error;
@@ -326,10 +325,10 @@ class Web3Service {
    */
   async burnTokens(amount: string): Promise<TransactionResponse> {
     try {
-      if (!this.tshcContract) throw new Error('TSHC contract not initialized');
+      if (!this.ntzsContract) throw new Error('NTZS contract not initialized');
       
-      const amountInWei = parseUnits(amount, 18);
-      return await this.tshcContract.burn(amountInWei);
+      const amountInWei = parseUnits(amount, 2); // NTZS uses 2 decimals
+      return await this.ntzsContract.burn(amountInWei);
     } catch (error) {
       console.error('Error burning tokens:', error);
       throw error;
@@ -344,10 +343,10 @@ class Web3Service {
     amounts: string[]
   ): Promise<TransactionResponse> {
     try {
-      if (!this.tshcContract) throw new Error('TSHC contract not initialized');
+      if (!this.ntzsContract) throw new Error('NTZS contract not initialized');
       
       const amountsInWei = amounts.map(amount => parseUnits(amount, 18));
-      return await this.tshcContract.createBatchMint(recipients, amountsInWei);
+      return await this.ntzsContract.createBatchMint(recipients, amountsInWei);
     } catch (error) {
       console.error('Error creating batch mint:', error);
       throw error;
@@ -362,10 +361,10 @@ class Web3Service {
     amounts: string[]
   ): Promise<TransactionResponse> {
     try {
-      if (!this.tshcContract) throw new Error('TSHC contract not initialized');
+      if (!this.ntzsContract) throw new Error('NTZS contract not initialized');
       
       const amountsInWei = amounts.map(amount => parseUnits(amount, 18));
-      return await this.tshcContract.createBatchBurn(holders, amountsInWei);
+      return await this.ntzsContract.createBatchBurn(holders, amountsInWei);
     } catch (error) {
       console.error('Error creating batch burn:', error);
       throw error;
@@ -379,9 +378,9 @@ class Web3Service {
     batchId: number
   ): Promise<TransactionResponse> {
     try {
-      if (!this.tshcContract) throw new Error('TSHC contract not initialized');
+      if (!this.ntzsContract) throw new Error('NTZS contract not initialized');
       
-      return await this.tshcContract.approveBatchOperation(batchId);
+      return await this.ntzsContract.approveBatchOperation(batchId);
     } catch (error) {
       console.error('Error approving batch operation:', error);
       throw error;
@@ -393,9 +392,9 @@ class Web3Service {
    */
   async getBatchOperation(batchId: number): Promise<any> {
     try {
-      if (!this.tshcContract) throw new Error('TSHC contract not initialized');
+      if (!this.ntzsContract) throw new Error('NTZS contract not initialized');
       
-      const batchOperation = await this.tshcContract.batchOperations(batchId);
+      const batchOperation = await this.ntzsContract.batchOperations(batchId);
       return {
         isMint: batchOperation.isMint,
         executed: batchOperation.executed,
@@ -538,13 +537,13 @@ class Web3Service {
    * Listen for TSHC transfer events
    */
   listenForTransfers(callback: (from: string, to: string, amount: string) => void): void {
-    if (!this.tshcContract) {
-      console.error('TSHC contract not initialized');
+    if (!this.ntzsContract) {
+      console.error('NTZS contract not initialized');
       return;
     }
     
-    this.tshcContract.on('Transfer', (from, to, amount) => {
-      callback(from, to, formatUnits(amount, 18));
+    this.ntzsContract.on('Transfer', (from, to, amount) => {
+      callback(from, to, formatUnits(amount, 2));
     });
   }
 
@@ -552,12 +551,12 @@ class Web3Service {
    * Listen for batch operation events
    */
   listenForBatchOperations(callback: (batchId: number, isMint: boolean) => void): void {
-    if (!this.tshcContract) {
-      console.error('TSHC contract not initialized');
+    if (!this.ntzsContract) {
+      console.error('NTZS contract not initialized');
       return;
     }
     
-    this.tshcContract.on('BatchOperationCreated', (batchId, isMint) => {
+    this.ntzsContract.on('BatchOperationCreated', (batchId, isMint) => {
       callback(batchId.toNumber(), isMint);
     });
   }
@@ -608,8 +607,8 @@ class Web3Service {
    * Stop listening to all events
    */
   removeAllListeners(): void {
-    if (this.tshcContract) {
-      this.tshcContract.removeAllListeners();
+    if (this.ntzsContract) {
+      this.ntzsContract.removeAllListeners();
     }
     
     if (this.reserveContract) {
@@ -628,12 +627,12 @@ class Web3Service {
    * Check if an address has a specific role
    */
   async hasRole(role: string, address: string): Promise<boolean> {
-    if (!this.isInitialized || !this.tshcContract) {
+    if (!this.isInitialized || !this.ntzsContract) {
       throw new Error('Web3 service not initialized');
     }
 
     try {
-      return await this.tshcContract.hasRole(role, address);
+      return await this.ntzsContract.hasRole(role, address);
     } catch (error) {
       console.error('Error checking role:', error);
       throw error;
@@ -644,15 +643,15 @@ class Web3Service {
    * Grant a role to an address
    */
   async grantRole(role: string, address: string): Promise<TransactionResponse> {
-    if (!this.isInitialized || !this.tshcContract || !this.signer) {
+    if (!this.isInitialized || !this.ntzsContract || !this.signer) {
       throw new Error('Web3 service not initialized or wallet not connected');
     }
 
     try {
       // Connect with signer to send transactions
-      const tshcWithSigner = this.tshcContract.connect(this.signer);
+      const ntzsWithSigner = this.ntzsContract.connect(this.signer);
       // Use the function interface to call the contract method
-      return await tshcWithSigner.getFunction('grantRole')(role, address);
+      return await ntzsWithSigner.getFunction('grantRole')(role, address);
     } catch (error) {
       console.error('Error granting role:', error);
       throw error;
@@ -663,15 +662,15 @@ class Web3Service {
    * Revoke a role from an address
    */
   async revokeRole(role: string, address: string): Promise<TransactionResponse> {
-    if (!this.isInitialized || !this.tshcContract || !this.signer) {
+    if (!this.isInitialized || !this.ntzsContract || !this.signer) {
       throw new Error('Web3 service not initialized or wallet not connected');
     }
 
     try {
       // Connect with signer to send transactions
-      const tshcWithSigner = this.tshcContract.connect(this.signer);
+      const ntzsWithSigner = this.ntzsContract.connect(this.signer);
       // Use the function interface to call the contract method
-      return await tshcWithSigner.getFunction('revokeRole')(role, address);
+      return await ntzsWithSigner.getFunction('revokeRole')(role, address);
     } catch (error) {
       console.error('Error revoking role:', error);
       throw error;
