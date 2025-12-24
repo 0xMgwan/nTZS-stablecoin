@@ -112,12 +112,12 @@ const WalletConnect: React.FC = () => {
               icon={<WalletIcon />}
               label={formatAddress(account)}
               sx={{ 
-                bgcolor: 'white',
-                color: 'text.primary',
+                bgcolor: theme => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'white',
+                color: theme => theme.palette.mode === 'dark' ? 'white' : 'text.primary',
                 border: '1px solid',
-                borderColor: 'divider',
+                borderColor: theme => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.3)' : 'divider',
                 '& .MuiChip-icon': {
-                  color: 'primary.main'
+                  color: theme => theme.palette.mode === 'dark' ? 'white' : 'primary.main'
                 }
               }}
             />
