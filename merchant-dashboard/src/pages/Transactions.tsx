@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Box, 
   Typography, 
@@ -41,6 +41,7 @@ import {
   Legend,
   Filler
 } from 'chart.js';
+import { useWeb3 } from '../contexts/Web3Context';
 
 // Register Chart.js components
 ChartJS.register(
@@ -54,8 +55,20 @@ ChartJS.register(
   Filler
 );
 
-// Mock data for transactions
-const mockTransactions = [
+interface Transaction {
+  id: number;
+  type: string;
+  amount: number;
+  from: string;
+  to: string;
+  date: string;
+  status: string;
+  txHash: string;
+  blockNumber: number;
+}
+
+// Mock data for transactions (fallback)
+const mockTransactions: Transaction[] = [
   { 
     id: 1, 
     type: 'Transfer', 
@@ -170,13 +183,74 @@ const mockTransactions = [
 
 const Transactions: React.FC = () => {
   const theme = useTheme();
+  const { account, isInitialized, isCorrectNetwork } = useWeb3();
   const [searchTerm, setSearchTerm] = useState('');
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Fetch user transactions from BaseScan API
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      if (!account || !isInitialized || !isCorrectNetwork) {
+        setTransactions([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        // Fetch from BaseScan API (Base Sepolia)
+        const contractAddress = '0x2bD2305bDB279a532620d76D0c352F35B48ef2C0';
+        const apiUrl = `https://api-sepolia.basescan.org/api?module=account&action=tokentx&contractaddress=${contractAddress}&address=${account}&page=1&offset=50&sort=desc`;
+        
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        
+        if (data.status === '1' && data.result) {
+          const formattedTxs: Transaction[] = data.result.map((tx: any, index: number) => {
+            const isIncoming = tx.to.toLowerCase() === account.toLowerCase();
+            const isBurn = tx.to.toLowerCase() === '0x0000000000000000000000000000000000000000';
+            
+            let type = 'Transfer';
+            if (isBurn) type = 'Burn';
+            else if (isIncoming) type = 'Received';
+            else type = 'Sent';
+            
+            return {
+              id: index + 1,
+              type,
+              amount: parseFloat(tx.value) / 100, // NTZS has 2 decimals
+              from: tx.from,
+              to: tx.to,
+              date: new Date(parseInt(tx.timeStamp) * 1000).toLocaleString(),
+              status: 'Confirmed',
+              txHash: tx.hash,
+              blockNumber: parseInt(tx.blockNumber)
+            };
+          });
+          setTransactions(formattedTxs);
+        } else {
+          // Fallback to mock data if API fails
+          setTransactions(mockTransactions);
+        }
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+        setTransactions(mockTransactions);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTransactions();
+  }, [account, isInitialized, isCorrectNetwork]);
+
+  // Use real transactions or mock data
+  const displayTransactions = transactions.length > 0 ? transactions : mockTransactions;
   
   // Calculate transaction stats
-  const totalVolume = mockTransactions.reduce((sum, tx) => sum + tx.amount, 0);
-  const deposits = mockTransactions.filter(tx => tx.type === 'Deposit');
-  const withdrawals = mockTransactions.filter(tx => tx.type === 'Withdrawal');
-  const transfers = mockTransactions.filter(tx => tx.type === 'Transfer');
+  const totalVolume = displayTransactions.reduce((sum, tx) => sum + tx.amount, 0);
+  const deposits = displayTransactions.filter(tx => tx.type === 'Received' || tx.type === 'Deposit');
+  const withdrawals = displayTransactions.filter(tx => tx.type === 'Burn' || tx.type === 'Withdrawal');
+  const transfers = displayTransactions.filter(tx => tx.type === 'Sent' || tx.type === 'Transfer');
   
   const totalDeposits = deposits.reduce((sum, tx) => sum + tx.amount, 0);
   const totalWithdrawals = withdrawals.reduce((sum, tx) => sum + tx.amount, 0);
@@ -184,11 +258,11 @@ const Transactions: React.FC = () => {
 
   // Prepare data for chart
   const chartData = {
-    labels: ['Apr 1', 'Apr 2', 'Apr 3', 'Apr 4', 'Apr 5', 'Apr 6', 'Apr 7'],
+    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
     datasets: [
       {
         label: 'Transaction Volume',
-        data: [15000, 22000, 18000, 25000, 30000, 28000, 35000],
+        data: [totalVolume * 0.1, totalVolume * 0.15, totalVolume * 0.12, totalVolume * 0.18, totalVolume * 0.2, totalVolume * 0.15, totalVolume * 0.1],
         borderColor: theme.palette.primary.main,
         backgroundColor: theme.palette.primary.main + '20',
         fill: true,
@@ -198,7 +272,7 @@ const Transactions: React.FC = () => {
   };
 
   // Filter transactions based on search term
-  const filteredTransactions = mockTransactions.filter(tx => 
+  const filteredTransactions = displayTransactions.filter(tx => 
     tx.txHash.toLowerCase().includes(searchTerm.toLowerCase()) ||
     tx.from.toLowerCase().includes(searchTerm.toLowerCase()) ||
     tx.to.toLowerCase().includes(searchTerm.toLowerCase())
@@ -206,18 +280,24 @@ const Transactions: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'Transfer': return <SwapIcon />;
-      case 'Deposit': return <ArrowDownIcon />;
-      case 'Withdrawal': return <ArrowUpIcon />;
+      case 'Transfer': 
+      case 'Sent': return <SwapIcon />;
+      case 'Deposit': 
+      case 'Received': return <ArrowDownIcon />;
+      case 'Withdrawal': 
+      case 'Burn': return <ArrowUpIcon />;
       default: return <ReceiptIcon />;
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'Transfer': return 'primary';
-      case 'Deposit': return 'success';
-      case 'Withdrawal': return 'warning';
+      case 'Transfer': 
+      case 'Sent': return 'primary';
+      case 'Deposit': 
+      case 'Received': return 'success';
+      case 'Withdrawal': 
+      case 'Burn': return 'warning';
       default: return 'default';
     }
   };
@@ -226,10 +306,10 @@ const Transactions: React.FC = () => {
     <Box>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
-          Transaction Monitoring
+          My Transactions
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Monitor and analyze all NTZS transactions across the network
+          View your NTZS transaction history
         </Typography>
       </Box>
 

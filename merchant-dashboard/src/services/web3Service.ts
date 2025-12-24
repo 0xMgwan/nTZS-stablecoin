@@ -336,6 +336,21 @@ class Web3Service {
   }
 
   /**
+   * Transfer NTZS tokens to another address
+   */
+  async transferTokens(to: string, amount: string): Promise<TransactionResponse> {
+    try {
+      if (!this.ntzsContract) throw new Error('NTZS contract not initialized');
+      
+      const amountInWei = parseUnits(amount, 2); // NTZS uses 2 decimals
+      return await this.ntzsContract.transfer(to, amountInWei);
+    } catch (error) {
+      console.error('Error transferring tokens:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Create a batch mint operation
    */
   async createBatchMint(

@@ -15,6 +15,7 @@ interface Web3ContextType {
   refreshData: () => Promise<void>;
   mintTokens: (to: string, amount: string) => Promise<any>;
   burnTokens: (amount: string) => Promise<any>;
+  transferTokens: (to: string, amount: string) => Promise<any>;
   createBatchMint: (recipients: string[], amounts: string[]) => Promise<any>;
   createBatchBurn: (holders: string[], amounts: string[]) => Promise<any>;
   approveBatchOperation: (batchId: number) => Promise<any>;
@@ -35,6 +36,7 @@ export const Web3Context = createContext<Web3ContextType>({
   refreshData: async () => {},
   mintTokens: async () => ({}),
   burnTokens: async () => ({}),
+  transferTokens: async () => ({}),
   createBatchMint: async () => ({}),
   createBatchBurn: async () => ({}),
   approveBatchOperation: async () => ({}),
@@ -213,6 +215,17 @@ export const Web3Provider: React.FC<Web3ProviderProps> = ({ children }) => {
     }
   };
 
+  // Transfer tokens function
+  const transferTokens = async (to: string, amount: string) => {
+    try {
+      setError(null);
+      return await web3Service.transferTokens(to, amount);
+    } catch (err: any) {
+      setError(err.message || 'Failed to transfer tokens');
+      throw err;
+    }
+  };
+
   // Create batch mint function
   const createBatchMint = async (recipients: string[], amounts: string[]) => {
     try {
@@ -334,6 +347,7 @@ export const Web3Provider: React.FC<Web3ProviderProps> = ({ children }) => {
       refreshData,
       mintTokens,
       burnTokens,
+      transferTokens,
       createBatchMint,
       createBatchBurn,
       approveBatchOperation,

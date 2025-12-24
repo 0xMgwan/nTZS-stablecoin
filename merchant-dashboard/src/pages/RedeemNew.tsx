@@ -24,7 +24,7 @@ import {
 import { useWeb3 } from '../contexts/Web3Context';
 
 const Redeem: React.FC = () => {
-  const { userBalance, isInitialized, account, isCorrectNetwork, refreshData } = useWeb3();
+  const { userBalance, isInitialized, account, isCorrectNetwork, refreshData, burnTokens } = useWeb3();
   const [withdrawMethod, setWithdrawMethod] = useState<'bank' | 'mobile'>('bank');
   const [amount, setAmount] = useState('');
   const [bankAccount, setBankAccount] = useState('');
@@ -32,6 +32,8 @@ const Redeem: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [txHash, setTxHash] = useState<string | null>(null);
+  const [step, setStep] = useState<'input' | 'burning' | 'processing'>('input');
 
   useEffect(() => {
     if (isInitialized && isCorrectNetwork && account) {
@@ -72,12 +74,33 @@ const Redeem: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      setStep('burning');
+      
+      // Step 1: Burn tokens on-chain
+      const tx = await burnTokens(amount);
+      setTxHash(tx.hash);
+      
+      // Wait for transaction confirmation
+      await tx.wait();
+      
+      setStep('processing');
+      
+      // Step 2: In production, this would notify backend to process fiat payout
+      // For now, we simulate the processing delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       setSuccess(true);
       await refreshData();
     } catch (err: any) {
-      setError(err.message || 'Failed to process redemption');
+      console.error('Redemption error:', err);
+      if (err.code === 'ACTION_REJECTED') {
+        setError('Transaction was rejected by user');
+      } else if (err.message?.includes('insufficient')) {
+        setError('Insufficient balance or gas');
+      } else {
+        setError(err.message || 'Failed to process redemption');
+      }
+      setStep('input');
     } finally {
       setIsSubmitting(false);
     }
@@ -89,6 +112,8 @@ const Redeem: React.FC = () => {
     setMobileNumber('');
     setSuccess(false);
     setError(null);
+    setTxHash(null);
+    setStep('input');
   };
 
   if (success) {
@@ -102,9 +127,26 @@ const Redeem: React.FC = () => {
           <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
             Your request to redeem {parseFloat(amount).toLocaleString()} NTZS has been submitted.
           </Typography>
-          <Alert severity="info" sx={{ mb: 3, textAlign: 'left' }}>
-            TSH {parseFloat(amount).toLocaleString()} will be sent to your {withdrawMethod === 'bank' ? 'bank account' : 'mobile money'} within 1-24 hours.
+          <Alert severity="success" sx={{ mb: 2, textAlign: 'left' }}>
+            Your NTZS tokens have been burned on-chain successfully!
           </Alert>
+          {txHash && (
+            <Alert severity="info" sx={{ mb: 3, textAlign: 'left' }}>
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                <strong>Transaction:</strong>{' '}
+                <Link 
+                  href={`https://sepolia.basescan.org/tx/${txHash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {txHash.slice(0, 10)}...{txHash.slice(-8)}
+                </Link>
+              </Typography>
+              <Typography variant="body2">
+                TSH {parseFloat(amount).toLocaleString()} will be sent to your {withdrawMethod === 'bank' ? 'bank account' : 'mobile money'} within 1-24 hours.
+              </Typography>
+            </Alert>
+          )}
           <Button variant="contained" onClick={handleReset} fullWidth>
             Redeem More
           </Button>
@@ -277,7 +319,10 @@ const Redeem: React.FC = () => {
           }}
         >
           {isSubmitting ? (
-            <CircularProgress size={24} color="inherit" />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <CircularProgress size={20} color="inherit" />
+              {step === 'burning' ? 'Burning tokens on-chain...' : 'Processing payout...'}
+            </Box>
           ) : (
             'Confirm Redemption'
           )}

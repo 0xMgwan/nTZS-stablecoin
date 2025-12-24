@@ -111,11 +111,14 @@ const WalletConnect: React.FC = () => {
             <Chip
               icon={<WalletIcon />}
               label={formatAddress(account)}
-              color="primary"
-              variant="outlined"
               sx={{ 
-                color: theme => theme.palette.mode === 'light' ? theme.palette.primary.main : 'inherit',
-                borderColor: theme => theme.palette.mode === 'light' ? theme.palette.primary.main : 'inherit'
+                bgcolor: 'white',
+                color: 'text.primary',
+                border: '1px solid',
+                borderColor: 'divider',
+                '& .MuiChip-icon': {
+                  color: 'primary.main'
+                }
               }}
             />
           </Tooltip>

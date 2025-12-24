@@ -23,7 +23,7 @@ import {
 import { useWeb3 } from '../contexts/Web3Context';
 
 const Send: React.FC = () => {
-  const { userBalance, isInitialized, account, isCorrectNetwork, refreshData } = useWeb3();
+  const { userBalance, isInitialized, account, isCorrectNetwork, refreshData, transferTokens } = useWeb3();
   const [destinationAddress, setDestinationAddress] = useState('');
   const [amount, setAmount] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,18 +69,26 @@ const Send: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      // TODO: Implement actual transfer using web3Service
-      // For now, simulate a transaction
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Transfer tokens on-chain
+      const tx = await transferTokens(destinationAddress, amount);
+      setTxHash(tx.hash);
       
-      // Mock transaction hash
-      setTxHash('0x' + Math.random().toString(16).slice(2) + Math.random().toString(16).slice(2));
+      // Wait for transaction confirmation
+      await tx.wait();
+      
       setSuccess(true);
       
       // Refresh balance
       await refreshData();
     } catch (err: any) {
-      setError(err.message || 'Failed to send tokens');
+      console.error('Transfer error:', err);
+      if (err.code === 'ACTION_REJECTED') {
+        setError('Transaction was rejected by user');
+      } else if (err.message?.includes('insufficient')) {
+        setError('Insufficient balance or gas');
+      } else {
+        setError(err.message || 'Failed to send tokens');
+      }
     } finally {
       setIsSubmitting(false);
     }
