@@ -126,9 +126,15 @@ const WalletConnect: React.FC = () => {
           <Tooltip title="Disconnect wallet">
             <IconButton 
               onClick={handleDisconnectWallet}
-              color="primary"
               size="small"
-              sx={{ ml: 1 }}
+              sx={{ 
+                ml: 1,
+                color: theme => theme.palette.mode === 'dark' ? 'white' : 'white',
+                bgcolor: theme => theme.palette.mode === 'dark' ? 'transparent' : 'rgba(255,255,255,0.2)',
+                '&:hover': {
+                  bgcolor: theme => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.3)'
+                }
+              }}
             >
               <LogoutIcon />
             </IconButton>
