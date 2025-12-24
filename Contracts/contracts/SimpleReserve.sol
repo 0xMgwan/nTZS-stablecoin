@@ -4,11 +4,11 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "./SimpleTSHC.sol";
+import "./SimpleNTZS.sol";
 
 /**
  * @title SimpleReserve
- * @notice Simplified version of Reserve for testing - manages the collateral backing the TSHC stablecoin
+ * @notice Simplified version of Reserve for testing - manages the collateral backing the NTZS stablecoin
  */
 contract SimpleReserve is AccessControl {
     using SafeERC20 for IERC20;
@@ -16,8 +16,8 @@ contract SimpleReserve is AccessControl {
     bytes32 public constant RESERVE_ADMIN_ROLE = keccak256("RESERVE_ADMIN_ROLE");
     bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE");
 
-    // TSHC token contract
-    SimpleTSHC public tshc;
+    // NTZS token contract
+    SimpleNTZS public ntzs;
 
     // Supported collateral assets
     struct CollateralAsset {
@@ -34,19 +34,19 @@ contract SimpleReserve is AccessControl {
 
     // Events
     event CollateralAdded(address indexed token, uint256 collateralRatio);
-    event CollateralDeposited(address indexed user, address indexed token, uint256 amount, uint256 tshcMinted);
-    event CollateralWithdrawn(address indexed user, address indexed token, uint256 amount, uint256 tshcBurned);
+    event CollateralDeposited(address indexed user, address indexed token, uint256 amount, uint256 ntzsMinted);
+    event CollateralWithdrawn(address indexed user, address indexed token, uint256 amount, uint256 ntzsBurned);
 
     /**
-     * @dev Constructor initializes the contract with basic roles and TSHC token
-     * @param _tshc The address of the TSHC token contract
+     * @dev Constructor initializes the contract with basic roles and NTZS token
+     * @param _ntzs The address of the NTZS token contract
      * @param _admin The address that will have the admin role
      */
-    constructor(address _tshc, address _admin) {
-        require(_tshc != address(0), "TSHC address cannot be zero");
+    constructor(address _ntzs, address _admin) {
+        require(_ntzs != address(0), "NTZS address cannot be zero");
         require(_admin != address(0), "Admin address cannot be zero");
 
-        tshc = SimpleTSHC(_tshc);
+        ntzs = SimpleNTZS(_ntzs);
 
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
         _grantRole(RESERVE_ADMIN_ROLE, _admin);
@@ -78,21 +78,21 @@ contract SimpleReserve is AccessControl {
     }
 
     /**
-     * @dev Deposit collateral and mint TSHC
+     * @dev Deposit collateral and mint NTZS
      * @param _token Address of the collateral token
      * @param _amount Amount of collateral to deposit
-     * @return tshcAmount Amount of TSHC minted
+     * @return ntzsAmount Amount of NTZS minted
      */
-    function depositCollateralAndMintTSHC(address _token, uint256 _amount) 
+    function depositCollateralAndMintNTZS(address _token, uint256 _amount) 
         external
-        returns (uint256 tshcAmount) 
+        returns (uint256 ntzsAmount) 
     {
         require(collateralAssets[_token].isSupported, "Collateral not supported");
         require(_amount > 0, "Amount must be greater than zero");
 
-        // Calculate TSHC to mint based on collateral ratio
-        // For simplicity, assuming 1:1 value between collateral and TSHC
-        tshcAmount = (_amount * 10000) / collateralAssets[_token].collateralRatio;
+        // Calculate NTZS to mint based on collateral ratio
+        // For simplicity, assuming 1:1 value between collateral and NTZS
+        ntzsAmount = (_amount * 10000) / collateralAssets[_token].collateralRatio;
 
         // Transfer collateral from user to reserve
         IERC20(_token).safeTransferFrom(msg.sender, address(this), _amount);
@@ -100,34 +100,34 @@ contract SimpleReserve is AccessControl {
         // Update total deposited
         collateralAssets[_token].totalDeposited += _amount;
 
-        // Mint TSHC to user
-        tshc.mint(msg.sender, tshcAmount);
+        // Mint NTZS to user
+        ntzs.mint(msg.sender, ntzsAmount);
 
-        emit CollateralDeposited(msg.sender, _token, _amount, tshcAmount);
+        emit CollateralDeposited(msg.sender, _token, _amount, ntzsAmount);
 
-        return tshcAmount;
+        return ntzsAmount;
     }
 
     /**
-     * @dev Burn TSHC and withdraw collateral
+     * @dev Burn NTZS and withdraw collateral
      * @param _token Address of the collateral token
-     * @param _tshcAmount Amount of TSHC to burn
+     * @param _ntzsAmount Amount of NTZS to burn
      * @return collateralAmount Amount of collateral withdrawn
      */
-    function burnTSHCAndWithdrawCollateral(address _token, uint256 _tshcAmount) 
+    function burnNTZSAndWithdrawCollateral(address _token, uint256 _ntzsAmount) 
         external
         returns (uint256 collateralAmount) 
     {
         require(collateralAssets[_token].isSupported, "Collateral not supported");
-        require(_tshcAmount > 0, "Amount must be greater than zero");
+        require(_ntzsAmount > 0, "Amount must be greater than zero");
 
         // Calculate collateral to withdraw based on collateral ratio
-        collateralAmount = (_tshcAmount * collateralAssets[_token].collateralRatio) / 10000;
+        collateralAmount = (_ntzsAmount * collateralAssets[_token].collateralRatio) / 10000;
 
         require(collateralAssets[_token].totalDeposited >= collateralAmount, "Insufficient collateral in reserve");
         
-        // Burn TSHC from user
-        tshc.burnFrom(msg.sender, _tshcAmount);
+        // Burn NTZS from user
+        ntzs.burnFrom(msg.sender, _ntzsAmount);
         
         // Update total deposited
         collateralAssets[_token].totalDeposited -= collateralAmount;
@@ -135,7 +135,7 @@ contract SimpleReserve is AccessControl {
         // Transfer collateral to user
         IERC20(_token).safeTransfer(msg.sender, collateralAmount);
         
-        emit CollateralWithdrawn(msg.sender, _token, collateralAmount, _tshcAmount);
+        emit CollateralWithdrawn(msg.sender, _token, collateralAmount, _ntzsAmount);
         
         return collateralAmount;
     }
