@@ -1,0 +1,17 @@
+[build]
+  publish = "build"
+  command = "npm install --legacy-peer-deps && npm run build"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--legacy-peer-deps"
+  CI = "false"
+  SKIP_PREFLIGHT_CHECK = "true"
+  # Skip scanning for public RPC URL (not a secret)
+  SECRETS_SCAN_OMIT_KEYS = "BASE_SEPOLIA_RPC_URL"
+
+# Handle SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
