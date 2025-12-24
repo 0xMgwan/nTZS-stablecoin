@@ -18,7 +18,9 @@ import {
   InputAdornment,
   Card,
   CardContent,
-  useTheme
+  useTheme,
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import { 
   Search as SearchIcon,
@@ -188,53 +190,107 @@ const Transactions: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch user transactions from BaseScan API
+  // Fetch user transactions from blockchain events
   useEffect(() => {
     const fetchTransactions = async () => {
       if (!account || !isInitialized || !isCorrectNetwork) {
-        setTransactions([]);
+        console.log('Transactions: Wallet not ready', { account, isInitialized, isCorrectNetwork });
         return;
       }
 
       setIsLoading(true);
+      console.log('Fetching transactions for account:', account);
+      
       try {
-        // Fetch from BaseScan API (Base Sepolia)
+        // Use ethers to get Transfer events from the contract
+        const { ethers } = await import('ethers');
+        const provider = new ethers.BrowserProvider(window.ethereum);
         const contractAddress = '0x2bD2305bDB279a532620d76D0c352F35B48ef2C0';
-        const apiUrl = `https://api-sepolia.basescan.org/api?module=account&action=tokentx&contractaddress=${contractAddress}&address=${account}&page=1&offset=50&sort=desc`;
         
-        const response = await fetch(apiUrl);
-        const data = await response.json();
+        // ERC20 Transfer event signature
+        const transferEventSignature = ethers.id('Transfer(address,address,uint256)');
         
-        if (data.status === '1' && data.result) {
-          const formattedTxs: Transaction[] = data.result.map((tx: any, index: number) => {
-            const isIncoming = tx.to.toLowerCase() === account.toLowerCase();
-            const isBurn = tx.to.toLowerCase() === '0x0000000000000000000000000000000000000000';
+        // Get current block
+        const currentBlock = await provider.getBlockNumber();
+        const fromBlock = Math.max(0, currentBlock - 10000); // Last ~10000 blocks
+        
+        // Get logs where user is sender OR receiver
+        const filterFrom = {
+          address: contractAddress,
+          topics: [
+            transferEventSignature,
+            ethers.zeroPadValue(account.toLowerCase(), 32), // from = user
+            null // any to
+          ],
+          fromBlock,
+          toBlock: 'latest'
+        };
+        
+        const filterTo = {
+          address: contractAddress,
+          topics: [
+            transferEventSignature,
+            null, // any from
+            ethers.zeroPadValue(account.toLowerCase(), 32) // to = user
+          ],
+          fromBlock,
+          toBlock: 'latest'
+        };
+        
+        const [logsFrom, logsTo] = await Promise.all([
+          provider.getLogs(filterFrom),
+          provider.getLogs(filterTo)
+        ]);
+        
+        console.log('Logs from user:', logsFrom.length, 'Logs to user:', logsTo.length);
+        
+        // Combine and deduplicate logs
+        const allLogs = [...logsFrom, ...logsTo];
+        const uniqueLogs = allLogs.filter((log, index, self) => 
+          index === self.findIndex(l => l.transactionHash === log.transactionHash)
+        );
+        
+        // Sort by block number descending
+        uniqueLogs.sort((a, b) => b.blockNumber - a.blockNumber);
+        
+        // Format transactions
+        const formattedTxs: Transaction[] = await Promise.all(
+          uniqueLogs.slice(0, 50).map(async (log, index) => {
+            const from = '0x' + log.topics[1].slice(26);
+            const to = '0x' + log.topics[2].slice(26);
+            const amount = parseInt(log.data, 16) / 100; // NTZS has 2 decimals
+            
+            const isIncoming = to.toLowerCase() === account.toLowerCase();
+            const isBurn = to.toLowerCase() === '0x0000000000000000000000000000000000000000';
             
             let type = 'Transfer';
             if (isBurn) type = 'Burn';
             else if (isIncoming) type = 'Received';
             else type = 'Sent';
             
+            // Get block timestamp
+            const block = await provider.getBlock(log.blockNumber);
+            const date = block ? new Date(block.timestamp * 1000).toLocaleString() : 'Unknown';
+            
             return {
               id: index + 1,
               type,
-              amount: parseFloat(tx.value) / 100, // NTZS has 2 decimals
-              from: tx.from,
-              to: tx.to,
-              date: new Date(parseInt(tx.timeStamp) * 1000).toLocaleString(),
+              amount,
+              from,
+              to,
+              date,
               status: 'Confirmed',
-              txHash: tx.hash,
-              blockNumber: parseInt(tx.blockNumber)
+              txHash: log.transactionHash,
+              blockNumber: log.blockNumber
             };
-          });
-          setTransactions(formattedTxs);
-        } else {
-          // Fallback to mock data if API fails
-          setTransactions(mockTransactions);
-        }
+          })
+        );
+        
+        console.log('Formatted transactions:', formattedTxs);
+        setTransactions(formattedTxs);
       } catch (error) {
         console.error('Error fetching transactions:', error);
-        setTransactions(mockTransactions);
+        setTransactions([]);
       } finally {
         setIsLoading(false);
       }
@@ -243,8 +299,8 @@ const Transactions: React.FC = () => {
     fetchTransactions();
   }, [account, isInitialized, isCorrectNetwork]);
 
-  // Use real transactions or mock data
-  const displayTransactions = transactions.length > 0 ? transactions : mockTransactions;
+  // Use real transactions if available, otherwise show mock data only if wallet not connected
+  const displayTransactions = !account ? mockTransactions : transactions;
   
   // Calculate transaction stats
   const totalVolume = displayTransactions.reduce((sum, tx) => sum + tx.amount, 0);
@@ -469,6 +525,20 @@ const Transactions: React.FC = () => {
       </Box>
 
       {/* Transactions Table */}
+      {isLoading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+          <CircularProgress />
+        </Box>
+      ) : !account ? (
+        <Alert severity="info" sx={{ mb: 3 }}>
+          Connect your wallet to view your transaction history
+        </Alert>
+      ) : filteredTransactions.length === 0 ? (
+        <Alert severity="info" sx={{ mb: 3 }}>
+          No transactions found for your wallet. Make a transfer, send, or redeem to see your transactions here.
+        </Alert>
+      ) : null}
+      
       <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 2, border: `1px solid ${theme.palette.divider}` }}>
         <Table>
           <TableHead>
@@ -487,8 +557,20 @@ const Transactions: React.FC = () => {
             {filteredTransactions.map((tx) => (
               <TableRow key={tx.id}>
                 <TableCell component="th" scope="row">
-                  <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-                    {tx.txHash}
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      fontFamily: 'monospace',
+                      cursor: tx.txHash.startsWith('0x') && tx.txHash.length > 20 ? 'pointer' : 'default',
+                      '&:hover': tx.txHash.startsWith('0x') && tx.txHash.length > 20 ? { color: 'primary.main', textDecoration: 'underline' } : {}
+                    }}
+                    onClick={() => {
+                      if (tx.txHash.startsWith('0x') && tx.txHash.length > 20) {
+                        window.open(`https://sepolia.basescan.org/tx/${tx.txHash}`, '_blank');
+                      }
+                    }}
+                  >
+                    {tx.txHash.length > 20 ? `${tx.txHash.slice(0, 10)}...${tx.txHash.slice(-8)}` : tx.txHash}
                   </Typography>
                 </TableCell>
                 <TableCell>
