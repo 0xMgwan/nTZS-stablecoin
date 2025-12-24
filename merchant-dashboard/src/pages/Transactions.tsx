@@ -262,9 +262,11 @@ const Transactions: React.FC = () => {
             
             const isIncoming = to.toLowerCase() === account.toLowerCase();
             const isBurn = to.toLowerCase() === '0x0000000000000000000000000000000000000000';
+            const isMint = from.toLowerCase() === '0x0000000000000000000000000000000000000000';
             
             let type = 'Transfer';
-            if (isBurn) type = 'Burn';
+            if (isMint) type = 'Mint';
+            else if (isBurn) type = 'Burn';
             else if (isIncoming) type = 'Received';
             else type = 'Sent';
             
@@ -304,7 +306,7 @@ const Transactions: React.FC = () => {
   
   // Calculate transaction stats
   const totalVolume = displayTransactions.reduce((sum, tx) => sum + tx.amount, 0);
-  const deposits = displayTransactions.filter(tx => tx.type === 'Received' || tx.type === 'Deposit');
+  const deposits = displayTransactions.filter(tx => tx.type === 'Received' || tx.type === 'Deposit' || tx.type === 'Mint');
   const withdrawals = displayTransactions.filter(tx => tx.type === 'Burn' || tx.type === 'Withdrawal');
   const transfers = displayTransactions.filter(tx => tx.type === 'Sent' || tx.type === 'Transfer');
   
@@ -339,7 +341,8 @@ const Transactions: React.FC = () => {
       case 'Transfer': 
       case 'Sent': return <SwapIcon />;
       case 'Deposit': 
-      case 'Received': return <ArrowDownIcon />;
+      case 'Received': 
+      case 'Mint': return <ArrowDownIcon />;
       case 'Withdrawal': 
       case 'Burn': return <ArrowUpIcon />;
       default: return <ReceiptIcon />;
@@ -351,7 +354,8 @@ const Transactions: React.FC = () => {
       case 'Transfer': 
       case 'Sent': return 'primary';
       case 'Deposit': 
-      case 'Received': return 'success';
+      case 'Received': 
+      case 'Mint': return 'success';
       case 'Withdrawal': 
       case 'Burn': return 'warning';
       default: return 'default';
